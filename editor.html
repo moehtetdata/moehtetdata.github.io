@@ -20,6 +20,8 @@
   .post b{font-size:15px} .post span{color:#9fb4ff;font-size:12px}
   .post div{color:#888;font-size:12px}
   .del{width:auto;margin-top:8px;padding:8px 14px;font-size:14px;background:#3a2020;color:#ff9c9c;border:1px solid #6b3030;border-radius:8px}
+  .imgprev{width:100%;border-radius:12px;margin-top:10px}
+  input[type=file]{padding:10px}
   a{color:#9fb4ff}
   #login{max-width:360px;margin:60px auto;padding:0 16px}
 </style>
@@ -44,6 +46,9 @@
   </label>
   <label>စာသား <textarea id="body" placeholder="မျှဝေချင်တာ ရေးပါ…"></textarea></label>
   <label>Link (ပုံ / App / File / Video ရှိရင်) <input id="link" placeholder="https://…"></label>
+  <label>📷 ပုံ တင်ရန် (ဖုန်းထဲက ရွေးလို့ရတယ်) <input id="imgfile" type="file" accept="image/*" onchange="uploadImage(this)"></label>
+  <div id="upstatus" style="margin-top:8px;font-size:14px"></div>
+  <img id="preview" class="imgprev" style="display:none" alt="">
   <button id="pub" onclick="publish()">📢 Publish တင်မယ်</button>
   <div id="status"></div>
 
@@ -102,6 +107,33 @@ function delPost(row){
     else { st.textContent='❌ ဖျက်မရဘူး — ပြန်စမ်းပါ'; }
   });
 }
+function uploadImage(inp){
+  var f=inp.files && inp.files[0]; if(!f) return;
+  var st=document.getElementById('upstatus'); st.textContent='ပုံ ပြင်နေတယ်…';
+  var img=new Image();
+  var url=URL.createObjectURL(f);
+  img.onload=function(){
+    var max=1280, w=img.width, h=img.height;
+    var sc=Math.min(1, max/Math.max(w,h));
+    var c=document.createElement('canvas'); c.width=Math.round(w*sc); c.height=Math.round(h*sc);
+    c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+    URL.revokeObjectURL(url);
+    var b64=c.toDataURL('image/jpeg',0.82).split(',')[1];
+    st.textContent='ပုံ တင်နေတယ်… ခဏစောင့် (၁ မိနစ်လောက် ကြာနိုင်တယ်)';
+    var params=new URLSearchParams(); params.append('action','upload'); params.append('key',KEY); params.append('name','img'+Date.now()+'.jpg'); params.append('img',b64);
+    fetch(API,{method:'POST',body:params}).then(function(r){return r.text();}).then(function(t){
+      var res=null; try{ res=JSON.parse(t); }catch(e){}
+      if(res && res.ok){
+        document.getElementById('link').value=res.url;
+        document.getElementById('kind').value='ပုံ';
+        var pv=document.getElementById('preview'); pv.src=res.url; pv.style.display='block';
+        st.textContent='✅ ပုံ တင်ပြီးပြီ — Publish နှိပ်ရင် post မှာ ပုံ တွဲပါမယ်';
+      } else { st.textContent='❌ ပုံ တင်မရဘူး — ပြန်စမ်းပါ (သို့) ပုံ link ကူးထည့်ပြီး တင်ပါ'; }
+    }).catch(function(){ st.textContent='❌ ပုံ တင်မရဘူး — connection စစ်ပြီး ပြန်စမ်းပါ'; });
+  };
+  img.onerror=function(){ st.textContent='❌ ဒီပုံကို ဖတ်မရဘူး — တခြားပုံ စမ်းပါ'; };
+  img.src=url;
+}
 function publish(){
   var title=document.getElementById('title').value.trim();
   var body=document.getElementById('body').value.trim();
@@ -114,6 +146,7 @@ function publish(){
     if(res && res.ok){
       st.textContent='✅ တင်ပြီးပြီ — site မှာ တန်း မြင်ရပြီ';
       document.getElementById('title').value=''; document.getElementById('body').value=''; document.getElementById('link').value='';
+      document.getElementById('preview').style.display='none'; document.getElementById('upstatus').textContent=''; document.getElementById('imgfile').value='';
       loadList();
     } else {
       st.textContent='❌ မရဘူး — connection စစ်ပြီး ပြန်စမ်းပါ';
