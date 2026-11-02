@@ -19,6 +19,7 @@
   .post{background:#1a1d24;border-radius:12px;padding:12px 14px;margin-top:10px}
   .post b{font-size:15px} .post span{color:#9fb4ff;font-size:12px}
   .post div{color:#888;font-size:12px}
+  .del{width:auto;margin-top:8px;padding:8px 14px;font-size:14px;background:#3a2020;color:#ff9c9c;border:1px solid #6b3030;border-radius:8px}
   a{color:#9fb4ff}
   #login{max-width:360px;margin:60px auto;padding:0 16px}
 </style>
@@ -87,9 +88,18 @@ function loadList(){
     for(var i=0;i<res.posts.length;i++){
       var p=res.posts[i];
       var d=p.ts? new Date(p.ts).toLocaleDateString('en-GB'):'';
-      h+='<div class="post"><span>'+esc(p.type)+'</span> <b>'+esc(p.title)+'</b><div>'+d+'</div></div>';
+      h+='<div class="post"><span>'+esc(p.type)+'</span> <b>'+esc(p.title)+'</b><div>'+d+'</div>'+(p.row? '<button class="del" onclick="delPost('+p.row+')">🗑️ ဖျက်မယ်</button>' : '')+'</div>';
     }
     el.innerHTML=h;
+  });
+}
+function delPost(row){
+  if(!confirm('ဒီ post ကို ဖျက်မှာ သေချာလား?')) return;
+  var st=document.getElementById('status');
+  st.textContent='ဖျက်နေတယ်…';
+  jsonp({action:'delete', key:KEY, row:row}, function(res){
+    if(res && res.ok){ st.textContent='🗑️ ဖျက်ပြီးပြီ'; loadList(); }
+    else { st.textContent='❌ ဖျက်မရဘူး — ပြန်စမ်းပါ'; }
   });
 }
 function publish(){
