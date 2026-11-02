@@ -9,10 +9,10 @@
   header{padding:20px 16px 8px;text-align:center}
   header h1{margin:0;font-size:26px} header p{color:#aaa;margin:6px 0 0}
   main{max-width:640px;margin:0 auto;padding:12px 16px 40px}
-  .note{background:#1c2a1c;border:1px solid #2e4a2e;color:#b9d8b9;border-radius:12px;padding:10px 14px;font-size:14px}
   .card{background:#1a1d24;border-radius:16px;padding:16px;margin-top:16px}
-  .card h2{margin:0 0 6px;font-size:19px} .card p{color:#ddd;line-height:1.6;margin:8px 0}
+  .card h2{margin:0 0 6px;font-size:19px} .card p{color:#ddd;line-height:1.6;margin:8px 0;white-space:pre-wrap;word-break:break-word}
   .tag{display:inline-block;background:#2a2f3a;color:#9fb4ff;border-radius:20px;padding:3px 10px;font-size:12px;margin-right:6px}
+  .date{color:#888;font-size:12px}
   .btn{display:inline-block;margin-top:10px;background:#2f7bff;color:#fff;text-decoration:none;padding:10px 16px;border-radius:10px;font-weight:700}
   .btn.file{background:#1f9d63} .btn.video{background:#8b5cf6}
   .img{width:100%;border-radius:12px;margin-top:10px;background:#222}
@@ -25,8 +25,7 @@
   <h1>📱 MoeHtet</h1>
   <p>နည်းပညာနဲ့ပတ်သက်တာ sharing တင်တဲ့နေရာ</p>
 </header>
-<main>
-
+<main id="feed">
   <article class="card">
     <span class="tag">နမူနာ</span><span class="tag">စာသား</span>
     <h2>ဖုန်းမှာ VPN ချိတ်မရရင် စစ်ရမယ့်အချက်</h2>
@@ -54,6 +53,34 @@
     <a class="btn video" href="#">▶️ Video ကြည့်ရန် (နမူနာ)</a>
   </article>
 </main>
-<footer>ဆိုင်က သပ်သပ် — <a href="https://moehtet.pages.dev">moehtet.pages.dev</a> မှာ ရှိနေမယ်။<br>Post အသစ်တင်ချင်ရင် <a href="editor.html">Editor</a> ကနေ တင်ပါ။</footer>
+<footer>ဆိုင်က သပ်သပ် — <a href="https://moehtet.pages.dev">moehtet.pages.dev</a> မှာ ရှိနေမယ်။</footer>
+<script>
+var API = 'https://script.google.com/macros/s/AKfycbyeXvBLYcbe038_QFTxiwulGH-oVbgsXI5_9VZ025MjfMaVGlRa_2QUX-0T6LTQeaxG8w/exec';
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function btnFor(p){
+  if(!p.link) return '';
+  if(p.type.indexOf('File')>-1) return '<a class="btn file" href="'+esc(p.link)+'" target="_blank" rel="noopener">📄 File ဒေါင်းလုဒ်</a>';
+  if(p.type.indexOf('Video')>-1) return '<a class="btn video" href="'+esc(p.link)+'" target="_blank" rel="noopener">▶️ Video ကြည့်ရန်</a>';
+  if(p.type.indexOf('App')>-1) return '<a class="btn" href="'+esc(p.link)+'" target="_blank" rel="noopener">⬇️ App Link</a>';
+  return '<a class="btn" href="'+esc(p.link)+'" target="_blank" rel="noopener">🔗 Link</a>';
+}
+function render(posts){
+  if(!posts || !posts.length) return;
+  var h='';
+  for(var i=0;i<posts.length;i++){
+    var p=posts[i];
+    var d=p.ts? new Date(p.ts):null;
+    var ds=d? ('<div class="date">'+d.toLocaleDateString('en-GB')+'</div>') : '';
+    var img=(p.type.indexOf('ပုံ')>-1 && p.link)? '<img class="img" src="'+esc(p.link)+'" alt="">' : '';
+    h+='<article class="card"><span class="tag">'+esc(p.type)+'</span>'+ds+'<h2>'+esc(p.title)+'</h2><p>'+esc(p.body)+'</p>'+img+(img?'':btnFor(p))+'</article>';
+  }
+  document.getElementById('feed').innerHTML=h;
+}
+var cb='mp'+Date.now();
+window[cb]=function(res){ if(res && res.ok) render(res.posts); };
+var s=document.createElement('script');
+s.src=API+'?callback='+cb+'&nocache='+Date.now();
+document.body.appendChild(s);
+</script>
 </body>
 </html>

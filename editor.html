@@ -7,20 +7,33 @@
 <style>
   *{box-sizing:border-box} body{margin:0;font-family:system-ui,sans-serif;background:#0f1115;color:#f2f2f2}
   main{max-width:640px;margin:0 auto;padding:20px 16px 40px}
-  h1{font-size:22px} label{display:block;margin-top:14px;color:#bbb;font-size:14px}
+  h1{font-size:22px} h2{font-size:17px;margin-top:28px}
+  label{display:block;margin-top:14px;color:#bbb;font-size:14px}
   input,textarea,select{width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid #333;background:#1a1d24;color:#fff;font-size:16px}
   textarea{min-height:120px}
   button{width:100%;margin-top:18px;padding:14px;border:0;border-radius:12px;background:#2f7bff;color:#fff;font-size:17px;font-weight:700}
+  button:disabled{opacity:.5}
   .note{background:#1c2a1c;border:1px solid #2e4a2e;color:#b9d8b9;border-radius:12px;padding:10px 14px;font-size:14px;line-height:1.6}
-  #out{background:#111;padding:12px;border-radius:10px;white-space:pre-wrap;word-break:break-all;font-size:13px;margin-top:16px}
+  .err{background:#2a1c1c;border:1px solid #4a2e2e;color:#d8b9b9;border-radius:12px;padding:10px 14px;font-size:14px;margin-top:14px}
+  #status{margin-top:14px;font-size:15px}
+  .post{background:#1a1d24;border-radius:12px;padding:12px 14px;margin-top:10px}
+  .post b{font-size:15px} .post span{color:#9fb4ff;font-size:12px}
+  .post div{color:#888;font-size:12px}
   a{color:#9fb4ff}
+  #login{max-width:360px;margin:60px auto;padding:0 16px}
 </style>
 </head>
 <body>
-<main>
+<div id="login">
+  <h1>🔒 Login</h1>
+  <label>Username <input id="lu" autocomplete="username"></label>
+  <label>Password <input id="lp" type="password" autocomplete="current-password"></label>
+  <button onclick="doLogin()">ဝင်မယ်</button>
+  <div id="lerr" class="err" style="display:none">Username / Password မှားနေတယ်</div>
+</div>
+<main id="app" style="display:none">
   <h1>✍️ Post အသစ်တင်ရန်</h1>
-  <div class="note">⚠️ <b>Preview editor</b> ပါ — ဒီမှာ ရိုက်ထားတာ ဖုန်းထဲမှာပဲ သိမ်းပြီး (ဒီဇိုင်းစစ်ဖို့) ပြန်ပြပေးတယ်။<br>
-  လူတိုင်း မြင်ရအောင် တကယ် publish လုပ်ဖို့က domain ready ဖြစ်တဲ့အခါ Shop ဈေးပြင်သလိုမျိုး Sheet backend နဲ့ ချိတ်ပေးမယ် — အဲဒီအချိန်ကျ ဒီ editor ပုံစံအတိုင်းပဲ သုံးရမယ်။</div>
+  <div class="note">ဒီမှာ တင်လိုက်ရင် <b>paingmoehtet.from-mm.dev</b> မှာ လူတိုင်း တန်း မြင်ရမယ်။</div>
 
   <label>ခေါင်းစဉ် <input id="title" placeholder="ဥပမာ — VPN အကြောင်း"></label>
   <label>အမျိုးအစား
@@ -29,20 +42,75 @@
     </select>
   </label>
   <label>စာသား <textarea id="body" placeholder="မျှဝေချင်တာ ရေးပါ…"></textarea></label>
-  <label>Link (App / File / Video ရှိရင်) <input id="link" placeholder="https://…"></label>
-  <button onclick="preview()">👀 Preview ပြမယ်</button>
-  <div id="out"></div>
-  <p style="text-align:center;margin-top:20px"><a href="index.html">← Feed ကို ပြန်ကြည့်မယ်</a></p>
+  <label>Link (ပုံ / App / File / Video ရှိရင်) <input id="link" placeholder="https://…"></label>
+  <button id="pub" onclick="publish()">📢 Publish တင်မယ်</button>
+  <div id="status"></div>
+
+  <h2>📌 တင်ထားပြီး Post များ</h2>
+  <div id="list">ခဏစောင့်…</div>
+  <p style="text-align:center;margin-top:20px"><a href="index.html">← Site ကို ကြည့်မယ်</a></p>
 </main>
 <script>
-function preview(){
-  var p={title:document.getElementById('title').value,kind:document.getElementById('kind').value,
-         body:document.getElementById('body').value,link:document.getElementById('link').value};
-  try{localStorage.setItem('moehtet_draft_post',JSON.stringify(p));}catch(e){}
-  document.getElementById('out').textContent='ဒီဇိုင်း preview အတွက် သိမ်းပြီးပြီ (ဖုန်းထဲမှာသာ):\n'+JSON.stringify(p,null,2);
+var API='https://script.google.com/macros/s/AKfycbyeXvBLYcbe038_QFTxiwulGH-oVbgsXI5_9VZ025MjfMaVGlRa_2QUX-0T6LTQeaxG8w/exec';
+var KEY='mh3375tech';
+var U='POSMOE2000', P='2000POS';
+function doLogin(){
+  if(document.getElementById('lu').value===U && document.getElementById('lp').value===P){
+    try{sessionStorage.setItem('mh_editor','1');}catch(e){}
+    showApp();
+  } else {
+    document.getElementById('lerr').style.display='block';
+  }
 }
-try{var d=JSON.parse(localStorage.getItem('moehtet_draft_post')||'null');
-  if(d){document.getElementById('title').value=d.title||'';document.getElementById('body').value=d.body||'';document.getElementById('link').value=d.link||'';}}catch(e){}
+function showApp(){
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+  loadList();
+}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function jsonp(params, cb){
+  var name='mp'+Date.now()+Math.floor(Math.random()*9999);
+  var t=setTimeout(function(){ cb(null); }, 30000);
+  window[name]=function(res){ clearTimeout(t); cb(res); };
+  var q=[];
+  for(var k in params) q.push(encodeURIComponent(k)+'='+encodeURIComponent(params[k]));
+  var s=document.createElement('script');
+  s.src=API+'?'+q.join('&')+'&callback='+name+'&nocache='+Date.now();
+  document.body.appendChild(s);
+}
+function loadList(){
+  jsonp({}, function(res){
+    var el=document.getElementById('list');
+    if(!res || !res.ok){ el.textContent='Post စာရင်း ဖတ်မရဘူး — ခဏနေ ပြန်စမ်းပါ'; return; }
+    if(!res.posts.length){ el.textContent='ခုထိ post မရှိသေးဘူး'; return; }
+    var h='';
+    for(var i=0;i<res.posts.length;i++){
+      var p=res.posts[i];
+      var d=p.ts? new Date(p.ts).toLocaleDateString('en-GB'):'';
+      h+='<div class="post"><span>'+esc(p.type)+'</span> <b>'+esc(p.title)+'</b><div>'+d+'</div></div>';
+    }
+    el.innerHTML=h;
+  });
+}
+function publish(){
+  var title=document.getElementById('title').value.trim();
+  var body=document.getElementById('body').value.trim();
+  var st=document.getElementById('status');
+  if(!title){ st.textContent='⚠️ ခေါင်းစဉ် ထည့်ပါ'; return; }
+  var btn=document.getElementById('pub');
+  btn.disabled=true; st.textContent='တင်နေတယ်… ခဏစောင့်';
+  jsonp({action:'add', key:KEY, title:title, type:document.getElementById('kind').value, body:body, link:document.getElementById('link').value.trim()}, function(res){
+    btn.disabled=false;
+    if(res && res.ok){
+      st.textContent='✅ တင်ပြီးပြီ — site မှာ တန်း မြင်ရပြီ';
+      document.getElementById('title').value=''; document.getElementById('body').value=''; document.getElementById('link').value='';
+      loadList();
+    } else {
+      st.textContent='❌ မရဘူး — connection စစ်ပြီး ပြန်စမ်းပါ';
+    }
+  });
+}
+try{ if(sessionStorage.getItem('mh_editor')==='1') showApp(); }catch(e){}
 </script>
 </body>
 </html>
