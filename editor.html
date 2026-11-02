@@ -46,7 +46,7 @@
   </label>
   <label>စာသား <textarea id="body" placeholder="မျှဝေချင်တာ ရေးပါ…"></textarea></label>
   <label>Link (ပုံ / App / File / Video ရှိရင်) <input id="link" placeholder="https://…"></label>
-  <label>📷 ပုံ တင်ရန် (ဖုန်းထဲက ရွေးလို့ရတယ်) <input id="imgfile" type="file" accept="image/*" onchange="uploadImage(this)"></label>
+  <label>📷🎬 ပုံ / Video တို တင်ရန် (ဖုန်းထဲက ရွေးလို့ရတယ်) <input id="imgfile" type="file" accept="image/*,video/*" onchange="uploadImage(this)"></label>
   <div id="upstatus" style="margin-top:8px;font-size:14px"></div>
   <img id="preview" class="imgprev" style="display:none" alt="">
   <button id="pub" onclick="publish()">📢 Publish တင်မယ်</button>
@@ -107,8 +107,18 @@ function delPost(row){
     else { st.textContent='❌ ဖျက်မရဘူး — ပြန်စမ်းပါ'; }
   });
 }
+var uploading=false;
+function sendUpload(params, done){
+  uploading=true;
+  fetch(API,{method:'POST',body:params}).then(function(r){return r.text();}).then(function(t){
+    uploading=false;
+    var res=null; try{ res=JSON.parse(t); }catch(e){}
+    done(res);
+  }).catch(function(){ uploading=false; done(null); });
+}
 function uploadImage(inp){
   var f=inp.files && inp.files[0]; if(!f) return;
+  if(f.type.indexOf('video/')===0){ uploadVideo(f); return; }
   var st=document.getElementById('upstatus'); st.textContent='ပုံ ပြင်နေတယ်…';
   var img=new Image();
   var url=URL.createObjectURL(f);
@@ -120,24 +130,45 @@ function uploadImage(inp){
     URL.revokeObjectURL(url);
     var b64=c.toDataURL('image/jpeg',0.82).split(',')[1];
     st.textContent='ပုံ တင်နေတယ်… ခဏစောင့် (၁ မိနစ်လောက် ကြာနိုင်တယ်)';
-    var params=new URLSearchParams(); params.append('action','upload'); params.append('key',KEY); params.append('name','img'+Date.now()+'.jpg'); params.append('img',b64);
-    fetch(API,{method:'POST',body:params}).then(function(r){return r.text();}).then(function(t){
-      var res=null; try{ res=JSON.parse(t); }catch(e){}
+    var params=new URLSearchParams(); params.append('action','upload'); params.append('key',KEY); params.append('kind','image'); params.append('name','img'+Date.now()+'.jpg'); params.append('img',b64);
+    sendUpload(params, function(res){
       if(res && res.ok){
         document.getElementById('link').value=res.url;
         document.getElementById('kind').value='ပုံ';
         var pv=document.getElementById('preview'); pv.src=res.url; pv.style.display='block';
         st.textContent='✅ ပုံ တင်ပြီးပြီ — Publish နှိပ်ရင် post မှာ ပုံ တွဲပါမယ်';
       } else { st.textContent='❌ ပုံ တင်မရဘူး — ပြန်စမ်းပါ (သို့) ပုံ link ကူးထည့်ပြီး တင်ပါ'; }
-    }).catch(function(){ st.textContent='❌ ပုံ တင်မရဘူး — connection စစ်ပြီး ပြန်စမ်းပါ'; });
+    });
   };
   img.onerror=function(){ st.textContent='❌ ဒီပုံကို ဖတ်မရဘူး — တခြားပုံ စမ်းပါ'; };
   img.src=url;
+}
+function uploadVideo(f){
+  var st=document.getElementById('upstatus');
+  if(f.size > 30*1024*1024){ st.textContent='❌ Video က 30MB ထက် ကြီးနေတယ် — တိုတိုလေးပဲ တင်ပါ'; return; }
+  st.textContent='Video ဖတ်နေတယ်…';
+  var rd=new FileReader();
+  rd.onload=function(){
+    var b64=String(rd.result).split(',')[1];
+    st.textContent='Video တင်နေတယ်… တော်တော်ကြာနိုင်တယ် — page မပိတ်ပါနဲ့';
+    var ext=(f.name.split('.').pop()||'mp4').toLowerCase();
+    var params=new URLSearchParams(); params.append('action','upload'); params.append('key',KEY); params.append('kind','video'); params.append('mime',f.type||'video/mp4'); params.append('name','vid'+Date.now()+'.'+ext); params.append('img',b64);
+    sendUpload(params, function(res){
+      if(res && res.ok){
+        document.getElementById('link').value=res.url;
+        document.getElementById('kind').value='Video Link (တခါတလေ)';
+        st.textContent='✅ Video တင်ပြီးပြီ — Publish နှိပ်ရင် post မှာ video တွဲပါမယ် (site မှာ တန်း ကြည့်လို့ရမယ်)';
+      } else { st.textContent='❌ Video တင်မရဘူး — connection စစ်ပြီး ပြန်စမ်းပါ'; }
+    });
+  };
+  rd.onerror=function(){ st.textContent='❌ Video ဖတ်မရဘူး'; };
+  rd.readAsDataURL(f);
 }
 function publish(){
   var title=document.getElementById('title').value.trim();
   var body=document.getElementById('body').value.trim();
   var st=document.getElementById('status');
+  if(uploading){ st.textContent='⏳ ပုံ/Video တင်နေတုန်းမို့ ခဏစောင့်ပါ'; return; }
   if(!title){ st.textContent='⚠️ ခေါင်းစဉ် ထည့်ပါ'; return; }
   var btn=document.getElementById('pub');
   btn.disabled=true; st.textContent='တင်နေတယ်… ခဏစောင့်';
