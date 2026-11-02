@@ -146,13 +146,20 @@ function uploadImage(inp){
 function uploadVideo(f){
   var st=document.getElementById('upstatus');
   if(f.size > 30*1024*1024){ st.textContent='❌ Video က 30MB ထက် ကြီးနေတယ် — တိုတိုလေးပဲ တင်ပါ'; return; }
-  st.textContent='Video ဖတ်နေတယ်…';
+  st.textContent='Video သေးအောင် ဖိနေတယ်… (video အရှည်လောက် ခဏကြာမယ်)';
+  compressVideo(f, function(blob, mime, ext){
+    if(!blob){ sendVideoBlob(f, f.type||'video/mp4', (f.name.split('.').pop()||'mp4').toLowerCase()); return; }
+    st.textContent='ဖိပြီးပြီ — မူလ ' + Math.round(f.size/1024) + ' KB → ' + Math.round(blob.size/1024) + ' KB. တင်နေတယ်…';
+    sendVideoBlob(blob, mime, ext);
+  });
+}
+function sendVideoBlob(blob, mime, ext){
+  var st=document.getElementById('upstatus');
   var rd=new FileReader();
   rd.onload=function(){
     var b64=String(rd.result).split(',')[1];
-    st.textContent='Video တင်နေတယ်… တော်တော်ကြာနိုင်တယ် — page မပိတ်ပါနဲ့';
-    var ext=(f.name.split('.').pop()||'mp4').toLowerCase();
-    var params=new URLSearchParams(); params.append('action','upload'); params.append('key',KEY); params.append('kind','video'); params.append('mime',f.type||'video/mp4'); params.append('name','vid'+Date.now()+'.'+ext); params.append('img',b64);
+    st.textContent='Video တင်နေတယ်… page မပိတ်ပါနဲ့';
+    var params=new URLSearchParams(); params.append('action','upload'); params.append('key',KEY); params.append('kind','video'); params.append('mime',mime); params.append('name','vid'+Date.now()+'.'+ext); params.append('img',b64);
     sendUpload(params, function(res){
       if(res && res.ok){
         document.getElementById('link').value=res.url;
@@ -162,7 +169,37 @@ function uploadVideo(f){
     });
   };
   rd.onerror=function(){ st.textContent='❌ Video ဖတ်မရဘူး'; };
-  rd.readAsDataURL(f);
+  rd.readAsDataURL(blob);
+}
+function compressVideo(f, done){
+  var finished=false;
+  function fin(b,m,e){ if(!finished){ finished=true; done(b,m,e); } }
+  try{
+    var url=URL.createObjectURL(f);
+    var v=document.createElement('video');
+    v.playsInline=true; v.preload='auto'; v.src=url;
+    var timer=setTimeout(function(){ fin(null); }, 15000);
+    v.onloadedmetadata=function(){
+      var max=720, w=v.videoWidth||640, h=v.videoHeight||360;
+      var sc=Math.min(1, max/Math.max(w,h));
+      var c=document.createElement('canvas');
+      c.width=Math.max(2, Math.round(w*sc/2)*2); c.height=Math.max(2, Math.round(h*sc/2)*2);
+      var ctx=c.getContext('2d');
+      var stream=c.captureStream(30);
+      try{ var vs=v.captureStream(); vs.getAudioTracks().forEach(function(t){ stream.addTrack(t); }); }catch(e){}
+      var rec;
+      try{ rec=new MediaRecorder(stream,{mimeType:'video/webm', videoBitsPerSecond:2000000, audioBitsPerSecond:128000}); }
+      catch(e){ clearTimeout(timer); fin(null); return; }
+      var chunks=[];
+      rec.ondataavailable=function(e){ if(e.data && e.data.size) chunks.push(e.data); };
+      rec.onstop=function(){ clearTimeout(timer); URL.revokeObjectURL(url); fin(new Blob(chunks,{type:'video/webm'}), 'video/webm', 'webm'); };
+      var draw=function(){ if(!v.ended){ ctx.drawImage(v,0,0,c.width,c.height); if(!v.paused) requestAnimationFrame(draw); } };
+      v.onplay=function(){ draw(); };
+      v.onended=function(){ try{ rec.stop(); }catch(e){ clearTimeout(timer); fin(null); } };
+      v.play().then(function(){ try{ rec.start(500); }catch(e){ clearTimeout(timer); fin(null); } draw(); }).catch(function(){ clearTimeout(timer); fin(null); });
+    };
+    v.onerror=function(){ clearTimeout(timer); fin(null); };
+  }catch(e){ fin(null); }
 }
 function publish(){
   var title=document.getElementById('title').value.trim();
