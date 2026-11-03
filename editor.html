@@ -34,6 +34,9 @@
   <label>Password <input id="lp" type="password" autocomplete="current-password"></label>
   <button onclick="doLogin()">ဝင်မယ်</button>
   <div id="lerr" class="err" style="display:none">Username / Password မှားနေတယ်</div>
+  <button id="fpbtn" onclick="loginFingerprint()" style="display:none;background:#20303a;border:1px solid #30506b;margin-top:14px">👆 Fingerprint နဲ့ ဝင်မယ်</button>
+  <button onclick="enrollFingerprint()" style="background:transparent;border:0;color:#9fb4ff;font-size:14px;margin-top:8px">🔐 Fingerprint မှတ်ထားမယ် (အသစ်)</button>
+  <div id="fpstatus" style="margin-top:10px;font-size:14px;color:#bbb"></div>
 </div>
 <main id="app" style="display:none">
   <h1>✍️ Post အသစ်တင်ရန်</h1>
@@ -235,6 +238,42 @@ function publish(){
     }
   });
 }
+function b64e(buf){ return btoa(String.fromCharCode.apply(null, new Uint8Array(buf))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); }
+function b64d(s){ s=s.replace(/-/g,'+').replace(/_/g,'/'); while(s.length%4) s+='='; var bin=atob(s); var u=new Uint8Array(bin.length); for(var i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i); return u.buffer; }
+function enrollFingerprint(){
+  var st=document.getElementById('fpstatus');
+  if(!window.PublicKeyCredential){ st.textContent='❌ ဒီ browser က fingerprint မထောက်ပံ့ဘူး — Chrome နဲ့ ဖွင့်ပြီး စမ်းပါ'; return; }
+  var challenge=new Uint8Array(32); crypto.getRandomValues(challenge);
+  navigator.credentials.create({publicKey:{
+    challenge:challenge,
+    rp:{id:location.hostname, name:'MoeHtet Editor'},
+    user:{id:new TextEncoder().encode('avo-editor'), name:'avo', displayName:'Avo'},
+    pubKeyCredParams:[{type:'public-key',alg:-7},{type:'public-key',alg:-257}],
+    authenticatorSelection:{authenticatorAttachment:'platform', userVerification:'required'},
+    timeout:60000
+  }}).then(function(cred){
+    try{ localStorage.setItem('mh_fp_cred', b64e(cred.rawId)); }catch(e){}
+    st.textContent='✅ မှတ်ထားပြီးပြီ — နောက်တစ်ခါ 👆 Fingerprint နဲ့ ဝင်လို့ရပြီ';
+    document.getElementById('fpbtn').style.display='block';
+  }).catch(function(err){ st.textContent='❌ မရဘူး ('+err.name+') — ပြန်စမ်းပါ'; });
+}
+function loginFingerprint(){
+  var st=document.getElementById('fpstatus');
+  var id=null; try{ id=localStorage.getItem('mh_fp_cred'); }catch(e){}
+  if(!id){ st.textContent='အရင် "🔐 Fingerprint မှတ်ထားမယ်" နဲ့ မှတ်ထားပါ'; return; }
+  var challenge=new Uint8Array(32); crypto.getRandomValues(challenge);
+  navigator.credentials.get({publicKey:{
+    challenge:challenge,
+    rpId:location.hostname,
+    allowCredentials:[{type:'public-key', id:b64d(id)}],
+    userVerification:'required',
+    timeout:60000
+  }}).then(function(){
+    try{ sessionStorage.setItem('mh_editor','1'); }catch(e){}
+    showApp();
+  }).catch(function(err){ st.textContent='❌ Fingerprint အတည်ပြုမရဘူး — password နဲ့ ဝင်ပါ'; });
+}
+try{ if(localStorage.getItem('mh_fp_cred')) document.getElementById('fpbtn').style.display='block'; }catch(e){}
 try{ if(sessionStorage.getItem('mh_editor')==='1') showApp(); }catch(e){}
 </script>
 </body>
