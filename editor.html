@@ -20,6 +20,7 @@
   .post b{font-size:15px} .post span{color:#9fb4ff;font-size:12px}
   .post div{color:#888;font-size:12px}
   .del{width:auto;margin-top:8px;padding:8px 14px;font-size:14px;background:#3a2020;color:#ff9c9c;border:1px solid #6b3030;border-radius:8px}
+  .cpy{width:auto;margin-top:8px;margin-right:8px;padding:8px 14px;font-size:14px;background:#20303a;color:#9fd8ff;border:1px solid #30506b;border-radius:8px}
   .imgprev{width:100%;border-radius:12px;margin-top:10px}
   input[type=file]{padding:10px}
   a{color:#9fb4ff}
@@ -93,10 +94,23 @@ function loadList(){
     for(var i=0;i<res.posts.length;i++){
       var p=res.posts[i];
       var d=p.ts? new Date(p.ts).toLocaleDateString('en-GB'):'';
-      h+='<div class="post"><span>'+esc(p.type)+'</span> <b>'+esc(p.title)+'</b><div>'+d+'</div>'+(p.row? '<button class="del" onclick="delPost('+p.row+')">🗑️ ဖျက်မယ်</button>' : '')+'</div>';
+      h+='<div class="post"><span>'+esc(p.type)+'</span> <b>'+esc(p.title)+'</b><div>'+d+'</div>'+(p.id? '<button class="cpy" onclick="copyPostLink(\''+p.id+'\')">🔗 Link ကူးမယ်</button>' : '')+(p.row? '<button class="del" onclick="delPost('+p.row+')">🗑️ ဖျက်မယ်</button>' : '')+'</div>';
     }
     el.innerHTML=h;
   });
+}
+function copyPostLink(id){
+  var url='https://paingmoehtet.from-mm.dev/#'+id;
+  var st=document.getElementById('status');
+  var ta=document.createElement('textarea');
+  ta.value=url; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  var ok=false;
+  try{ ok=document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta);
+  if(ok){ st.textContent='✅ Link ကူးပြီးပြီ — ပို့ချင်တဲ့နေရာမှာ paste လုပ်ရုံပဲ'; }
+  else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(function(){ st.textContent='✅ Link ကူးပြီးပြီ'; }, function(){ st.textContent='Link: '+url; }); }
+  else { st.textContent='Link: '+url; }
 }
 function delPost(row){
   if(!confirm('ဒီ post ကို ဖျက်မှာ သေချာလား?')) return;

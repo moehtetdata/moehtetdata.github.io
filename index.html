@@ -16,6 +16,8 @@
   .btn{display:inline-block;margin-top:10px;background:#2f7bff;color:#fff;text-decoration:none;padding:10px 16px;border-radius:10px;font-weight:700}
   .btn.file{background:#1f9d63} .btn.video{background:#8b5cf6}
   .img{width:100%;border-radius:12px;margin-top:10px;background:#222}
+  .sharebtn{margin-top:12px;background:#2a2f3a;color:#9fb4ff;border:0;border-radius:8px;padding:8px 14px;font-size:13px}
+  .allink{color:#9fb4ff;font-size:15px}
   footer{text-align:center;color:#777;font-size:13px;padding:20px}
   footer a{color:#9fb4ff}
 </style>
@@ -64,22 +66,49 @@ function btnFor(p){
   if(p.type.indexOf('App')>-1) return '<a class="btn" href="'+esc(p.link)+'" target="_blank" rel="noopener">⬇️ App Link</a>';
   return '<a class="btn" href="'+esc(p.link)+'" target="_blank" rel="noopener">🔗 Link</a>';
 }
+function cardHtml(p){
+  var d=p.ts? new Date(p.ts):null;
+  var ds=d? ('<div class="date">'+d.toLocaleDateString('en-GB')+'</div>') : '';
+  var img=(p.type.indexOf('ပုံ')>-1 && p.link)? '<img class="img" src="'+esc(p.link)+'" alt="">' : '';
+  var vid=(!img && p.type.indexOf('Video')>-1 && p.link && p.link.indexOf('drive.google.com')>-1)? '<div style="position:relative;padding-top:56.25%;margin-top:10px"><iframe src="'+esc(p.link)+'" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:12px" allowfullscreen></iframe></div>' : '';
+  var media=img||vid;
+  var share=p.id? '<br><button class="sharebtn" onclick="copyLink(this,\''+esc(p.id)+'\')">🔗 Link ကူးမယ်</button>' : '';
+  return '<article class="card"><span class="tag">'+esc(p.type)+'</span>'+ds+'<h2>'+esc(p.title)+'</h2><p>'+esc(p.body)+'</p>'+media+(media?'':btnFor(p))+share+'</article>';
+}
 function render(posts){
   if(!posts || !posts.length) return;
   var h='';
-  for(var i=0;i<posts.length;i++){
-    var p=posts[i];
-    var d=p.ts? new Date(p.ts):null;
-    var ds=d? ('<div class="date">'+d.toLocaleDateString('en-GB')+'</div>') : '';
-    var img=(p.type.indexOf('ပုံ')>-1 && p.link)? '<img class="img" src="'+esc(p.link)+'" alt="">' : '';
-    var vid=(!img && p.type.indexOf('Video')>-1 && p.link && p.link.indexOf('drive.google.com')>-1)? '<div style="position:relative;padding-top:56.25%;margin-top:10px"><iframe src="'+esc(p.link)+'" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:12px" allowfullscreen></iframe></div>' : '';
-    var media=img||vid;
-    h+='<article class="card"><span class="tag">'+esc(p.type)+'</span>'+ds+'<h2>'+esc(p.title)+'</h2><p>'+esc(p.body)+'</p>'+media+(media?'':btnFor(p))+'</article>';
-  }
+  for(var i=0;i<posts.length;i++) h+=cardHtml(posts[i]);
   document.getElementById('feed').innerHTML=h;
 }
+function start(posts){
+  if(!posts || !posts.length) return;
+  var hsh=location.hash.replace('#','');
+  if(hsh){
+    for(var i=0;i<posts.length;i++){
+      if(posts[i].id===hsh){
+        document.getElementById('feed').innerHTML='<p><a class="allink" href="./">← Post အားလုံး ကြည့်မယ်</a></p>'+cardHtml(posts[i]);
+        return;
+      }
+    }
+  }
+  render(posts);
+}
+function copyLink(btn,id){
+  var url='https://paingmoehtet.from-mm.dev/#'+id;
+  var ta=document.createElement('textarea');
+  ta.value=url; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  var ok=false;
+  try{ ok=document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta);
+  function done(){ btn.textContent='✅ ကူးပြီးပြီ'; setTimeout(function(){ btn.textContent='🔗 Link ကူးမယ်'; },2000); }
+  if(ok){ done(); }
+  else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(done, function(){ btn.textContent=url; }); }
+  else { btn.textContent=url; }
+}
 var cb='mp'+Date.now();
-window[cb]=function(res){ if(res && res.ok) render(res.posts); };
+window[cb]=function(res){ if(res && res.ok) start(res.posts); };
 var s=document.createElement('script');
 s.src=API+'?callback='+cb+'&nocache='+Date.now();
 document.body.appendChild(s);
