@@ -28,32 +28,7 @@
   <p>နည်းပညာနဲ့ပတ်သက်တာ sharing တင်တဲ့နေရာ</p>
 </header>
 <main id="feed">
-  <article class="card">
-    <span class="tag">နမူနာ</span><span class="tag">စာသား</span>
-    <h2>ဖုန်းမှာ VPN ချိတ်မရရင် စစ်ရမယ့်အချက်</h2>
-    <p>WireGuard ပုံစံနဲ့ ချိတ်ပြီး data မသွားရင် ISP လမ်းကြောင်းက ပိတ်ထားနိုင်တယ်။ MASQUE ပုံစံ client နဲ့ စမ်းကြည့်ပါ။</p>
-  </article>
-
-  <article class="card">
-    <span class="tag">နမူနာ</span><span class="tag">App Link</span>
-    <h2>MoeHtet VPN (Android)</h2>
-    <p>WARP key တစ်ခု ထည့်ရုံနဲ့ သုံးလို့ရတဲ့ VPN app — ကိုယ့် key ကိုယ်ထည့်သုံးပါ။</p>
-    <a class="btn" href="https://github.com/moehtetdata/moehtet/releases/download/v0.3.3/MoeHtet.apk">⬇️ APK ဒေါင်းလုဒ်</a>
-  </article>
-
-  <article class="card">
-    <span class="tag">နမူနာ</span><span class="tag">ပုံ + File</span>
-    <h2>Shop ဈေးနှုန်း အသစ်များ</h2>
-    <p>ပုံနဲ့တကွ ဈေးနှုန်းစာရင်းကို file အနေနဲ့လည်း ဒေါင်းလုဒ်လုပ်လို့ရအောင် တင်ထားတဲ့ ပုံစံ နမူနာ။</p>
-    <a class="btn file" href="#">📄 File ဒေါင်းလုဒ် (နမူနာ)</a>
-  </article>
-
-  <article class="card">
-    <span class="tag">နမူနာ</span><span class="tag">Video Link (တခါတလေ)</span>
-    <h2>Video သင်ခန်းစာ — Link ပဲ တင်မယ်</h2>
-    <p>Video ကို site ပေါ် တိုက်ရိုက် မတင်ဘဲ link အနေနဲ့ပဲ မျှဝေတဲ့ ပုံစံ။</p>
-    <a class="btn video" href="#">▶️ Video ကြည့်ရန် (နမူနာ)</a>
-  </article>
+  <div style="text-align:center;color:#aaa;padding:36px 0">⏳ Post တွေ ယူနေတယ်…</div>
 </main>
 <script>
 var API = 'https://script.google.com/macros/s/AKfycbyeXvBLYcbe038_QFTxiwulGH-oVbgsXI5_9VZ025MjfMaVGlRa_2QUX-0T6LTQeaxG8w/exec';
@@ -81,7 +56,11 @@ function render(posts){
   document.getElementById('feed').innerHTML=h;
 }
 function start(posts){
-  if(!posts || !posts.length) return;
+  loaded=true;
+  if(!posts || !posts.length){
+    document.getElementById('feed').innerHTML='<p style="text-align:center;color:#aaa;padding:36px 0">ခုထိ post မရှိသေးဘူး</p>';
+    return;
+  }
   var hsh=location.hash.replace('#','');
   if(hsh){
     for(var i=0;i<posts.length;i++){
@@ -106,8 +85,15 @@ function copyLink(btn,id){
   else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(done, function(){ btn.textContent=url; }); }
   else { btn.textContent=url; }
 }
+var loaded=false;
 var cb='mp'+Date.now();
 window[cb]=function(res){ if(res && res.ok) start(res.posts); };
+setTimeout(function(){
+  if(!loaded){
+    var f=document.getElementById('feed');
+    if(f) f.innerHTML='<p style="text-align:center;color:#aaa;padding:36px 0">Connection နှေးနေတယ် — page ကို refresh ပြန်လုပ်ပါ</p>';
+  }
+}, 20000);
 var s=document.createElement('script');
 s.src=API+'?callback='+cb+'&nocache='+Date.now();
 document.body.appendChild(s);
