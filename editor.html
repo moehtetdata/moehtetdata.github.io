@@ -86,6 +86,64 @@
   #login h1{font-size:27px}
   #fpbtn{background:rgba(95,216,255,.11) !important; border:1px solid rgba(95,216,255,.30) !important; box-shadow:none}
   .site-link{text-align:center; margin-top:22px}
+  #login{overflow:hidden}
+  #login::before{
+    content:""; position:absolute; inset:0 0 auto; height:1px;
+    background:linear-gradient(90deg,transparent,rgba(95,216,255,.75),rgba(242,198,109,.65),transparent);
+  }
+  .studio-hero{
+    position:relative; overflow:hidden; padding:24px; border-radius:30px;
+    background:
+      radial-gradient(circle at 88% 0%, rgba(242,198,109,.20), transparent 15rem),
+      radial-gradient(circle at 0% 0%, rgba(95,216,255,.18), transparent 16rem),
+      linear-gradient(155deg,rgba(255,255,255,.11),rgba(255,255,255,.04));
+    border:1px solid rgba(255,255,255,.14);
+    box-shadow:0 28px 80px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.10);
+    backdrop-filter:blur(20px);
+  }
+  .studio-top{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:22px}
+  .studio-brand{display:flex; align-items:center; gap:11px; font-weight:900; letter-spacing:-.02em}
+  .mini-mark{
+    width:43px; height:43px; display:grid; place-items:center; border-radius:14px;
+    background:linear-gradient(145deg,rgba(255,255,255,.24),rgba(255,255,255,.06));
+    border:1px solid rgba(255,255,255,.22); font-size:20px; font-weight:900;
+  }
+  .live-pill{
+    display:inline-flex; align-items:center; padding:7px 11px; border-radius:999px;
+    color:#a7f3d0; background:rgba(37,217,139,.11); border:1px solid rgba(37,217,139,.27);
+    font-size:11px; font-weight:900; letter-spacing:.13em;
+  }
+  .studio-hero h1{font-size:clamp(30px,7vw,44px)}
+  .studio-hero .sub{max-width:560px; font-size:15px}
+  .feature-row{display:flex; flex-wrap:wrap; gap:9px; margin-top:20px}
+  .feature-row span{
+    padding:8px 12px; border-radius:999px; font-size:13px; color:#eceff7;
+    background:rgba(255,255,255,.065); border:1px solid rgba(255,255,255,.11);
+  }
+  .panel{position:relative; overflow:hidden}
+  .panel::before{
+    content:""; position:absolute; inset:0 0 auto; height:1px;
+    background:linear-gradient(90deg,transparent,rgba(95,216,255,.55),rgba(139,92,246,.45),transparent);
+  }
+  .form-head,.panel-head{display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin-bottom:6px}
+  .form-head h2,.panel-head h2{margin:0; font-size:20px}
+  .form-head p,.panel-head p{margin:6px 0 0; color:var(--muted); font-size:13.5px; line-height:1.6}
+  .form-icon,.library-icon{
+    flex:0 0 auto; width:44px; height:44px; display:grid; place-items:center; border-radius:15px;
+    background:rgba(95,216,255,.11); border:1px solid rgba(95,216,255,.22); font-size:20px;
+  }
+  .upload-label{
+    padding:16px; border:1px dashed rgba(95,216,255,.38); border-radius:20px;
+    background:linear-gradient(145deg,rgba(95,216,255,.09),rgba(139,92,246,.07));
+  }
+  .upload-label input{border:0; background:rgba(5,7,15,.45); margin-top:12px}
+  #pub{
+    min-height:54px; font-size:17px;
+    background:linear-gradient(135deg,#1687ff,#7657ff 55%,#b7791f);
+    box-shadow:0 18px 38px rgba(63,105,255,.30);
+  }
+  .secure-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:17px}
+  .secure-row span{padding:7px 10px; border-radius:999px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10); color:#cdd3e2; font-size:12px}
   @media (max-width:600px){
     main{padding-top:26px}
     .panel{padding:18px; border-radius:23px}
@@ -107,14 +165,23 @@
   <button id="fpbtn" onclick="loginFingerprint()" style="display:none;background:#20303a;border:1px solid #30506b;margin-top:14px">👆 Fingerprint နဲ့ ဝင်မယ်</button>
   <button onclick="enrollFingerprint()" style="background:transparent;border:0;color:#9fb4ff;font-size:14px;margin-top:8px">🔐 Fingerprint မှတ်ထားမယ် (အသစ်)</button>
   <div id="fpstatus" style="margin-top:10px;font-size:14px;color:#bbb"></div>
+  <div class="secure-row"><span>🔐 Private Editor</span><span>☁️ Cloud Posts</span><span>⚡ Fast Publish</span></div>
 </div>
 <main id="app" style="display:none">
-  <div class="eyebrow">MoeHtet Studio</div>
-  <h1>✍️ Post အသစ်တင်ရန်</h1>
-  <p class="sub">Premium tech sharing space အတွက် content အသစ် ဖန်တီးပါ။</p>
+  <section class="studio-hero">
+    <div class="studio-top">
+      <div class="studio-brand"><span class="mini-mark">M</span><span>MoeHtet Studio</span></div>
+      <span class="live-pill">● LIVE</span>
+    </div>
+    <div class="eyebrow">Creator Dashboard</div>
+    <h1>✍️ Post အသစ်တင်ရန်</h1>
+    <p class="sub">Premium tech sharing space အတွက် content အသစ် ဖန်တီးပြီး တစ်ချက်တည်းနဲ့ publish လုပ်ပါ။</p>
+    <div class="feature-row"><span>⚡ Fast Publish</span><span>🖼️ Media Upload</span><span>🔗 Share Link Ready</span></div>
+  </section>
   <div class="note">ဒီမှာ တင်လိုက်ရင် <b>paingmoehtet.from-mm.dev</b> မှာ လူတိုင်း တန်း မြင်ရမယ်။</div>
 
   <section class="panel">
+  <div class="form-head"><div><h2>Create Post</h2><p>ခေါင်းစဉ်, အမျိုးအစားနဲ့ အကြောင်းအရာ ဖြည့်ပြီး publish လုပ်ပါ။</p></div><span class="form-icon">✨</span></div>
   <label>ခေါင်းစဉ် <input id="title" placeholder="ဥပမာ — VPN အကြောင်း"></label>
   <label>အမျိုးအစား
     <select id="kind">
@@ -123,15 +190,16 @@
   </label>
   <label>စာသား <textarea id="body" placeholder="မျှဝေချင်တာ ရေးပါ…"></textarea></label>
   <label>Link (ပုံ / App / File / Video ရှိရင်) <input id="link" placeholder="https://…"></label>
-  <label>📷🎬 ပုံ / Video တို တင်ရန် (ဖုန်းထဲက ရွေးလို့ရတယ်) <input id="imgfile" type="file" accept="image/*,video/*" onchange="uploadImage(this)"></label>
+  <label class="upload-label">📷🎬 ပုံ / Video တို တင်ရန် <span style="display:block;margin-top:5px;color:#a9afc0;font-weight:500">ဖုန်းထဲက ရွေးလိုက်ရင် အလိုအလျောက် upload လုပ်ပေးမယ်</span> <input id="imgfile" type="file" accept="image/*,video/*" onchange="uploadImage(this)"></label>
   <div id="upstatus" style="margin-top:8px;font-size:14px"></div>
   <img id="preview" class="imgprev" style="display:none" alt="">
   <button id="pub" onclick="publish()">📢 Publish တင်မယ်</button>
   <div id="status"></div>
   </section>
 
-  <h2>📌 တင်ထားပြီး Post များ</h2>
+  <h2>📌 Content Library</h2>
   <section class="panel">
+  <div class="panel-head"><div><h2>တင်ထားပြီး Post များ</h2><p>Link ကူးတာ နဲ့ ဖျက်တာကို ဒီကနေ လုပ်နိုင်တယ်။</p></div><span class="library-icon">🗂️</span></div>
   <div id="list">ခဏစောင့်…</div>
   </section>
   <p class="site-link"><a href="index.html">← Site ကို ကြည့်မယ်</a></p>
