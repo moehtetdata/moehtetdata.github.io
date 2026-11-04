@@ -5,31 +5,101 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Post တင်ရန် — MoeHtet Sharing</title>
 <style>
-  *{box-sizing:border-box} body{margin:0;font-family:system-ui,sans-serif;background:#0f1115;color:#f2f2f2}
-  main{max-width:640px;margin:0 auto;padding:20px 16px 40px}
-  h1{font-size:22px} h2{font-size:17px;margin-top:28px}
-  label{display:block;margin-top:14px;color:#bbb;font-size:14px}
-  input,textarea,select{width:100%;margin-top:6px;padding:12px;border-radius:10px;border:1px solid #333;background:#1a1d24;color:#fff;font-size:16px}
-  textarea{min-height:120px}
-  button{width:100%;margin-top:18px;padding:14px;border:0;border-radius:12px;background:#2f7bff;color:#fff;font-size:17px;font-weight:700}
+  :root{
+    --bg:#070812; --panel:rgba(255,255,255,.065); --stroke:rgba(255,255,255,.13);
+    --text:#f8f8fc; --muted:#a9afc0; --gold:#f2c66d; --cyan:#5fd8ff; --violet:#8b5cf6;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; color:var(--text); overflow-x:hidden;
+    font-family:Inter,ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:
+      radial-gradient(circle at 10% -10%, rgba(95,216,255,.27), transparent 32rem),
+      radial-gradient(circle at 92% 0%, rgba(139,92,246,.25), transparent 30rem),
+      radial-gradient(circle at 50% 115%, rgba(242,198,109,.11), transparent 28rem),
+      linear-gradient(180deg,#080913,#0b0d1a 52%,#070812);
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; opacity:.13;
+    background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:44px 44px; mask-image:linear-gradient(to bottom,black,transparent 75%);
+  }
+  main{position:relative; max-width:760px; margin:0 auto; padding:34px 16px 52px}
+  h1{font-size:29px; line-height:1.2; letter-spacing:-.03em; margin:0}
+  h2{font-size:20px; margin:30px 0 4px; letter-spacing:-.02em}
+  .brand-mark{
+    width:62px; height:62px; display:grid; place-items:center; border-radius:20px;
+    font-size:29px; font-weight:900; color:#fff; margin-bottom:16px;
+    background:linear-gradient(145deg,rgba(255,255,255,.22),rgba(255,255,255,.05));
+    border:1px solid rgba(255,255,255,.22); box-shadow:0 20px 48px rgba(95,216,255,.18);
+  }
+  .eyebrow{color:var(--gold); font-size:11px; font-weight:800; letter-spacing:.22em; text-transform:uppercase; margin-bottom:9px}
+  .sub{color:var(--muted); line-height:1.7; margin:9px 0 0}
+  .panel{
+    margin-top:18px; padding:21px; border-radius:26px;
+    background:linear-gradient(155deg,rgba(255,255,255,.09),rgba(255,255,255,.037));
+    border:1px solid var(--stroke);
+    box-shadow:0 24px 70px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.09);
+    backdrop-filter:blur(18px);
+  }
+  label{display:block;margin-top:16px;color:#c9cedd;font-size:14px;font-weight:700}
+  label:first-child{margin-top:0}
+  input,textarea,select{
+    width:100%; margin-top:8px; padding:13px 14px; border-radius:15px;
+    border:1px solid rgba(255,255,255,.13); background:rgba(5,7,15,.52); color:#fff;
+    font-size:16px; outline:none; transition:border-color .18s, box-shadow .18s, background .18s;
+  }
+  input:focus,textarea:focus,select:focus{border-color:rgba(95,216,255,.68); box-shadow:0 0 0 4px rgba(95,216,255,.13); background:rgba(5,7,15,.72)}
+  textarea{min-height:132px; resize:vertical; line-height:1.65}
+  select option{background:#121524;color:#fff}
+  button{
+    width:100%; margin-top:19px; padding:15px 18px; border:0; border-radius:999px; cursor:pointer;
+    background:linear-gradient(135deg,#2f7bff,#7657ff); color:#fff; font-size:16px; font-weight:850;
+    box-shadow:0 16px 34px rgba(63,105,255,.27);
+  }
   button:disabled{opacity:.5}
-  .note{background:#1c2a1c;border:1px solid #2e4a2e;color:#b9d8b9;border-radius:12px;padding:10px 14px;font-size:14px;line-height:1.6}
-  .err{background:#2a1c1c;border:1px solid #4a2e2e;color:#d8b9b9;border-radius:12px;padding:10px 14px;font-size:14px;margin-top:14px}
-  #status{margin-top:14px;font-size:15px}
-  .post{background:#1a1d24;border-radius:12px;padding:12px 14px;margin-top:10px}
-  .post b{font-size:15px} .post span{color:#9fb4ff;font-size:12px}
-  .post div{color:#888;font-size:12px}
-  .del{width:auto;margin-top:8px;padding:8px 14px;font-size:14px;background:#3a2020;color:#ff9c9c;border:1px solid #6b3030;border-radius:8px}
-  .cpy{width:auto;margin-top:8px;margin-right:8px;padding:8px 14px;font-size:14px;background:#20303a;color:#9fd8ff;border:1px solid #30506b;border-radius:8px}
-  .imgprev{width:100%;border-radius:12px;margin-top:10px}
-  input[type=file]{padding:10px}
-  a{color:#9fb4ff}
-  #login{max-width:360px;margin:60px auto;padding:0 16px}
+  .note{
+    background:linear-gradient(135deg,rgba(37,217,139,.13),rgba(95,216,255,.08));
+    border:1px solid rgba(37,217,139,.25); color:#c9f2dc; border-radius:19px;
+    padding:13px 15px; font-size:14px; line-height:1.65; margin-top:17px;
+  }
+  .err{background:rgba(255,92,92,.10); border:1px solid rgba(255,92,92,.28); color:#ffc4c4; border-radius:15px; padding:11px 14px; font-size:14px; margin-top:14px}
+  #status,#upstatus{margin-top:13px; font-size:14.5px; line-height:1.6; color:#e6e9f2}
+  .post{
+    background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.10);
+    border-radius:19px; padding:15px; margin-top:11px;
+  }
+  .post b{font-size:15.5px; line-height:1.45} .post span{color:#ffe1a1; font-size:12px; font-weight:800}
+  .post div{color:#9299ac; font-size:12px; margin-top:4px}
+  .del,.cpy{width:auto; min-height:39px; margin-top:11px; padding:8px 14px; font-size:13.5px; box-shadow:none}
+  .del{background:rgba(255,92,92,.11); color:#ffabab; border:1px solid rgba(255,92,92,.30)}
+  .cpy{margin-right:8px; background:rgba(95,216,255,.10); color:#aee7ff; border:1px solid rgba(95,216,255,.28)}
+  .imgprev{width:100%; border-radius:18px; margin-top:14px; border:1px solid rgba(255,255,255,.12)}
+  input[type=file]{padding:11px; border-style:dashed; cursor:pointer}
+  a{color:#9fd8ff; font-weight:700}
+  #login{
+    position:relative; max-width:410px; margin:7vh auto 40px; padding:28px;
+    border-radius:29px; background:linear-gradient(155deg,rgba(255,255,255,.10),rgba(255,255,255,.04));
+    border:1px solid var(--stroke); box-shadow:0 28px 80px rgba(0,0,0,.38);
+    backdrop-filter:blur(20px);
+  }
+  #login h1{font-size:27px}
+  #fpbtn{background:rgba(95,216,255,.11) !important; border:1px solid rgba(95,216,255,.30) !important; box-shadow:none}
+  .site-link{text-align:center; margin-top:22px}
+  @media (max-width:600px){
+    main{padding-top:26px}
+    .panel{padding:18px; border-radius:23px}
+    #login{margin:28px 14px 36px; padding:24px}
+    h1{font-size:26px}
+  }
 </style>
 </head>
 <body>
 <div id="login">
-  <h1>🔒 Login</h1>
+  <div class="brand-mark">M</div>
+  <div class="eyebrow">MoeHtet Studio</div>
+  <h1>🔒 Editor Login</h1>
+  <p class="sub">Post အသစ်တင်ဖို့နဲ့ တင်ထားတာတွေ စီမံဖို့ ဝင်ပါ။</p>
   <label>Username <input id="lu" autocomplete="username"></label>
   <label>Password <input id="lp" type="password" autocomplete="current-password"></label>
   <button onclick="doLogin()">ဝင်မယ်</button>
@@ -39,9 +109,12 @@
   <div id="fpstatus" style="margin-top:10px;font-size:14px;color:#bbb"></div>
 </div>
 <main id="app" style="display:none">
+  <div class="eyebrow">MoeHtet Studio</div>
   <h1>✍️ Post အသစ်တင်ရန်</h1>
+  <p class="sub">Premium tech sharing space အတွက် content အသစ် ဖန်တီးပါ။</p>
   <div class="note">ဒီမှာ တင်လိုက်ရင် <b>paingmoehtet.from-mm.dev</b> မှာ လူတိုင်း တန်း မြင်ရမယ်။</div>
 
+  <section class="panel">
   <label>ခေါင်းစဉ် <input id="title" placeholder="ဥပမာ — VPN အကြောင်း"></label>
   <label>အမျိုးအစား
     <select id="kind">
@@ -55,10 +128,13 @@
   <img id="preview" class="imgprev" style="display:none" alt="">
   <button id="pub" onclick="publish()">📢 Publish တင်မယ်</button>
   <div id="status"></div>
+  </section>
 
   <h2>📌 တင်ထားပြီး Post များ</h2>
+  <section class="panel">
   <div id="list">ခဏစောင့်…</div>
-  <p style="text-align:center;margin-top:20px"><a href="index.html">← Site ကို ကြည့်မယ်</a></p>
+  </section>
+  <p class="site-link"><a href="index.html">← Site ကို ကြည့်မယ်</a></p>
 </main>
 <script>
 var API='https://script.google.com/macros/s/AKfycbyeXvBLYcbe038_QFTxiwulGH-oVbgsXI5_9VZ025MjfMaVGlRa_2QUX-0T6LTQeaxG8w/exec';

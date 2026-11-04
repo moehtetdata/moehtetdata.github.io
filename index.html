@@ -5,31 +5,128 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MoeHtet — နည်းပညာ Sharing</title>
 <style>
-  *{box-sizing:border-box} body{margin:0;font-family:system-ui,sans-serif;background:#0f1115;color:#f2f2f2}
-  header{padding:20px 16px 8px;text-align:center}
-  header h1{margin:0;font-size:26px} header p{color:#aaa;margin:6px 0 0}
-  main{max-width:640px;margin:0 auto;padding:12px 16px 40px}
-  .card{background:#1a1d24;border-radius:16px;padding:16px;margin-top:16px}
-  .card h2{margin:0 0 6px;font-size:19px} .card p{color:#ddd;line-height:1.6;margin:8px 0;white-space:pre-wrap;word-break:break-word}
-  .tag{display:inline-block;background:#2a2f3a;color:#9fb4ff;border-radius:20px;padding:3px 10px;font-size:12px;margin-right:6px}
-  .date{color:#888;font-size:12px}
-  .btn{display:inline-block;margin-top:10px;background:#2f7bff;color:#fff;text-decoration:none;padding:10px 16px;border-radius:10px;font-weight:700}
-  .btn.file{background:#1f9d63} .btn.video{background:#8b5cf6}
-  .img{width:100%;border-radius:12px;margin-top:10px;background:#222}
-  .sharebtn{margin-top:12px;background:#2a2f3a;color:#9fb4ff;border:0;border-radius:8px;padding:8px 14px;font-size:13px}
-  .allink{color:#9fb4ff;font-size:15px}
-  footer{text-align:center;color:#777;font-size:13px;padding:20px}
-  footer a{color:#9fb4ff}
+  :root{
+    --bg:#070812; --panel:rgba(255,255,255,.065); --stroke:rgba(255,255,255,.13);
+    --text:#f8f8fc; --muted:#a9afc0; --gold:#f2c66d; --cyan:#5fd8ff; --violet:#8b5cf6; --green:#25d98b;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0; min-height:100vh; color:var(--text); overflow-x:hidden;
+    font-family:Inter,ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:
+      radial-gradient(circle at 12% -8%, rgba(95,216,255,.30), transparent 34rem),
+      radial-gradient(circle at 88% 4%, rgba(139,92,246,.28), transparent 32rem),
+      radial-gradient(circle at 50% 115%, rgba(242,198,109,.13), transparent 30rem),
+      linear-gradient(180deg,#080913 0%,#0b0d1a 48%,#070812 100%);
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; opacity:.16;
+    background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+    background-size:44px 44px;
+    mask-image:linear-gradient(to bottom,black,transparent 72%);
+  }
+  .hero{position:relative; max-width:860px; margin:0 auto; padding:58px 20px 24px; text-align:center}
+  .logo-badge{
+    width:76px; height:76px; margin:0 auto 18px; display:grid; place-items:center;
+    border-radius:24px; font-size:36px; font-weight:900; letter-spacing:-.06em; color:#fff;
+    background:linear-gradient(145deg,rgba(255,255,255,.22),rgba(255,255,255,.05));
+    border:1px solid rgba(255,255,255,.22);
+    box-shadow:0 24px 60px rgba(95,216,255,.20), inset 0 1px 0 rgba(255,255,255,.35);
+    backdrop-filter:blur(18px);
+  }
+  .eyebrow{color:var(--gold); font-size:11px; font-weight:800; letter-spacing:.24em; text-transform:uppercase}
+  .hero h1{
+    margin:12px 0 0; font-size:clamp(44px,9vw,76px); line-height:.98; letter-spacing:-.055em; font-weight:900;
+  }
+  .hero h1 span{
+    background:linear-gradient(92deg,var(--cyan),#a78bfa 48%,var(--gold));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero p{max-width:640px; margin:16px auto 0; color:#c6cad6; font-size:16px; line-height:1.85}
+  .hero-pills{display:flex; justify-content:center; flex-wrap:wrap; gap:9px; margin-top:24px}
+  .hero-pills span{
+    padding:8px 13px; border-radius:999px; color:#e9ecf5; font-size:13px;
+    background:rgba(255,255,255,.065); border:1px solid rgba(255,255,255,.11);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.08); backdrop-filter:blur(14px);
+  }
+  main{position:relative; max-width:760px; margin:0 auto; padding:12px 16px 58px}
+  .card{
+    position:relative; overflow:hidden; margin-top:18px; padding:23px;
+    border-radius:26px; border:1px solid var(--stroke);
+    background:linear-gradient(155deg,rgba(255,255,255,.095),rgba(255,255,255,.038));
+    box-shadow:0 24px 70px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.09);
+    backdrop-filter:blur(18px);
+  }
+  .card::before{
+    content:""; position:absolute; inset:0 0 auto; height:1px;
+    background:linear-gradient(90deg,transparent,rgba(95,216,255,.65),rgba(242,198,109,.55),transparent);
+  }
+  .meta-row{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:13px}
+  .tag{
+    display:inline-flex; align-items:center; padding:6px 11px; border-radius:999px;
+    color:#ffe1a1; background:rgba(242,198,109,.12); border:1px solid rgba(242,198,109,.24);
+    font-size:12px; font-weight:700;
+  }
+  .date{color:#8f96a9; font-size:12px; white-space:nowrap}
+  .card h2{margin:0; font-size:23px; line-height:1.35; letter-spacing:-.02em}
+  .card p{color:#dde1eb; line-height:1.85; margin:11px 0 0; white-space:pre-wrap; word-break:break-word; font-size:15.5px}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; min-height:44px;
+    background:linear-gradient(135deg,#2f7bff,#7657ff); color:#fff; text-decoration:none;
+    padding:11px 18px; border-radius:999px; font-weight:800; font-size:14px;
+    box-shadow:0 14px 30px rgba(63,105,255,.28);
+  }
+  .btn.file{background:linear-gradient(135deg,#0dbd78,#079669); box-shadow:0 14px 30px rgba(16,185,129,.22)}
+  .btn.video{background:linear-gradient(135deg,#8b5cf6,#d946ef); box-shadow:0 14px 30px rgba(168,85,247,.24)}
+  .img{width:100%; border-radius:19px; margin-top:16px; background:#222; border:1px solid rgba(255,255,255,.10); display:block}
+  .card iframe{box-shadow:0 18px 45px rgba(0,0,0,.28)}
+  .actions{display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-top:17px}
+  .sharebtn{
+    min-height:42px; background:rgba(255,255,255,.065); color:#cfe9ff; border:1px solid rgba(255,255,255,.13);
+    border-radius:999px; padding:9px 15px; font-size:13px; font-weight:700; cursor:pointer;
+  }
+  .allink{color:#9fd8ff; font-size:15px; font-weight:700; text-decoration:none}
+  .state-card{
+    margin-top:18px; padding:34px 20px; text-align:center; color:#d9dde8;
+    border-radius:26px; border:1px solid var(--stroke); background:rgba(255,255,255,.055);
+    box-shadow:0 24px 70px rgba(0,0,0,.25); backdrop-filter:blur(18px);
+  }
+  .state-card small{display:block; margin-top:7px; color:var(--muted)}
+  .spinner{
+    width:38px; height:38px; margin:0 auto 15px; border-radius:50%;
+    border:3px solid rgba(255,255,255,.14); border-top-color:var(--cyan);
+    animation:spin .8s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  #feed > p{
+    margin-top:18px; padding:30px 20px !important; text-align:center;
+    border-radius:26px; border:1px solid var(--stroke); background:rgba(255,255,255,.055);
+    color:#c9cedb !important; box-shadow:0 24px 70px rgba(0,0,0,.25);
+  }
+  footer{position:relative; text-align:center; color:#747b8d; font-size:13px; padding:8px 20px 30px}
+  @media (max-width:600px){
+    .hero{padding-top:42px}
+    .logo-badge{width:66px;height:66px;border-radius:21px;font-size:31px}
+    .hero p{font-size:15px}
+    .card{padding:19px; border-radius:23px}
+    .card h2{font-size:21px}
+    .btn,.sharebtn{width:auto}
+  }
 </style>
 </head>
 <body>
-<header>
-  <h1>📱 MoeHtet</h1>
-  <p>နည်းပညာနဲ့ပတ်သက်တာ sharing တင်တဲ့နေရာ</p>
+<header class="hero">
+  <div class="logo-badge">M</div>
+  <div class="eyebrow">MoeHtet • Tech Sharing</div>
+  <h1>MoeHtet <span>Tech</span></h1>
+  <p>နည်းပညာ tips, app တွေနဲ့ အသုံးဝင်တဲ့ sharing တွေကို တစ်နေရာတည်းမှာ စုစည်းထားတဲ့ premium space</p>
+  <div class="hero-pills"><span>⚡ မြန်ဆန်</span><span>📱 Mobile First</span><span>✨ နေ့တိုင်း Update</span></div>
 </header>
 <main id="feed">
-  <div style="text-align:center;color:#aaa;padding:36px 0">⏳ Post တွေ ယူနေတယ်…</div>
+  <div class="state-card"><div class="spinner"></div><div>Post တွေ ယူနေတယ်…</div><small>ခဏစောင့်ပါ</small></div>
 </main>
+<footer>© MoeHtet — နည်းပညာ Sharing</footer>
 <script>
 var API = 'https://script.google.com/macros/s/AKfycbyeXvBLYcbe038_QFTxiwulGH-oVbgsXI5_9VZ025MjfMaVGlRa_2QUX-0T6LTQeaxG8w/exec';
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -46,8 +143,8 @@ function cardHtml(p){
   var img=(p.type.indexOf('ပုံ')>-1 && p.link)? '<img class="img" src="'+esc(p.link)+'" alt="">' : '';
   var vid=(!img && p.type.indexOf('Video')>-1 && p.link && p.link.indexOf('drive.google.com')>-1)? '<div style="position:relative;padding-top:56.25%;margin-top:10px"><iframe src="'+esc(p.link)+'" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:12px" allowfullscreen></iframe></div>' : '';
   var media=img||vid;
-  var share=p.id? '<br><button class="sharebtn" onclick="copyLink(this,\''+esc(p.id)+'\')">🔗 Link ကူးမယ်</button>' : '';
-  return '<article class="card"><span class="tag">'+esc(p.type)+'</span>'+ds+'<h2>'+esc(p.title)+'</h2><p>'+esc(p.body)+'</p>'+media+(media?'':btnFor(p))+share+'</article>';
+  var share=p.id? '<button class="sharebtn" onclick="copyLink(this,\''+esc(p.id)+'\')">🔗 Link ကူးမယ်</button>' : '';
+  return '<article class="card"><div class="meta-row"><span class="tag">'+esc(p.type)+'</span>'+ds+'</div><h2>'+esc(p.title)+'</h2><p>'+esc(p.body)+'</p>'+media+'<div class="actions">'+(media?'':btnFor(p))+share+'</div></article>';
 }
 function render(posts){
   if(!posts || !posts.length) return;
