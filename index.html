@@ -90,7 +90,23 @@
   .qa.active .qa-ic{box-shadow:0 0 0 3px var(--blue),0 10px 20px rgba(0,87,217,.20); transform:translateY(-2px)}
   .section{max-width:760px; margin:0 auto; padding:20px 16px 0}
   .sec-head{display:flex; align-items:baseline; justify-content:space-between; margin:2px 2px 12px}
-  .sec-title{font-size:17.5px; font-weight:850; color:var(--ink)}
+  .sec-title{font-size:17.5px; font-weight:850; color:var(--ink); display:flex; align-items:center; gap:9px}
+  .pop-badge{
+    width:34px; height:34px; border-radius:12px; display:grid; place-items:center; font-size:17px;
+    background:linear-gradient(145deg,#ffe9a8 0%,#f6c453 38%,#dd9412 72%,#b97a06 100%);
+    box-shadow:inset 0 1px 2px rgba(255,255,255,.75), inset 0 -2px 4px rgba(120,72,0,.35), 0 8px 18px rgba(217,164,32,.35);
+    position:relative; overflow:hidden; flex:none;
+  }
+  .pop-badge::after{
+    content:''; position:absolute; top:0; left:-70%; width:45%; height:100%;
+    background:linear-gradient(105deg,transparent,rgba(255,255,255,.55),transparent);
+    transform:skewX(-20deg); animation:popshine 3.2s ease-in-out infinite;
+  }
+  @keyframes popshine{0%,55%{left:-70%} 85%,100%{left:130%}}
+  .pop-word{
+    background:linear-gradient(92deg,#8a5a00,#d99a16 45%,#8a5a00);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
   .sec-more{font-size:13px; color:var(--blue); font-weight:700}
   .pop-sheet{
     background:#fff; border:1px solid var(--line); border-radius:26px; padding:18px 12px 8px;
@@ -224,7 +240,7 @@
   </div>
 </div>
 <section class="section">
-  <div class="sec-head"><div class="sec-title" id="popTitle">⭐ Popular</div><div class="sec-more" id="popMore">Services</div></div>
+  <div class="sec-head"><div class="sec-title"><span class="pop-badge">👑</span><span class="pop-word" id="popTitle">Popular</span></div><div class="sec-more" id="popMore">Services</div></div>
   <div class="pop-sheet"><div class="pop-grid">
     <a class="tile" href="https://github.com/moehtetdata/moehtet/releases/download/v0.3.3/MoeHtet.apk" target="_blank" rel="noopener"><span class="t-ic">📱</span><span id="tVpn">MoeHtet VPN</span></a>
     <button class="tile" onclick="jumpFilter(event,'App')"><span class="t-ic">⬇️</span><span id="tApps">Apps</span></button>
@@ -342,8 +358,8 @@ function copyLink(btn,id){
   else { btn.textContent=url; }
 }
 var I18N={
-  my:{title:'MoeHtet — နည်းပညာ Sharing',greet_m:'မင်္ဂလာနံနက်ခင်းပါ ☀️',greet_a:'မင်္ဂလာနေ့လယ်ခင်းပါ 🌤️',greet_e:'မင်္ဂလာညနေခင်းပါ 🌇',greet_n:'မင်္ဂလာညချမ်းပါ 🌙',search:'Post ရှာရန်…',w_big:'နည်းပညာ tips နဲ့ app တွေ စုစည်းရာ',w_stars:'⭐ Premium Sharing',w_note:'✨ နေ့တိုင်း Update',qa_all:'အားလုံး',qa_apps:'Apps',qa_files:'Files',qa_video:'Video',qa_imgs:'ပုံများ',popular:'⭐ Popular',services:'Services',t_vpn:'MoeHtet VPN',t_apps:'Apps',t_files:'Files',t_video:'Video',t_imgs:'ပုံများ',t_posts:'နောက်ဆုံး Posts',t_support:'Support Chat',t_home:'ပင်မ',promo_b:'📱 MoeHtet VPN — အသစ်',promo_s:'MASQUE နည်းပညာနဲ့ မြန်ဆန်တဲ့ VPN app',promo_btn:'ဒေါင်းလုဒ် ⬇️',latest:'📰 နောက်ဆုံး Post များ',results:'🔎 ရလဒ်များ',empty:'ရှာတာ မတွေ့ဘူး — တခြား စာလုံး စမ်းကြည့်ပါ',no_posts:'ခုထိ post မရှိသေးဘူး',loading:'Post တွေ ယူနေတယ်…',wait:'ခဏစောင့်ပါ',slow:'Connection နှေးနေတယ် — page ကို refresh ပြန်လုပ်ပါ',copy:'🔗 Link ကူးမယ်',copied:'✅ ကူးပြီးပြီ',btn_app:'⬇️ App Link',btn_file:'📄 File ဒေါင်းလုဒ်',btn_video:'▶️ Video ကြည့်ရန်',btn_link:'🔗 Link',back:'← Post အားလုံး ကြည့်မယ်',nav_home:'Home',nav_posts:'Posts',nav_vpn:'VPN App',nav_files:'Files',nav_support:'Support',footer:'© MoeHtet — နည်းပညာ Sharing'},
-  en:{title:'MoeHtet — Tech Sharing',greet_m:'Good Morning ☀️',greet_a:'Good Afternoon 🌤️',greet_e:'Good Evening 🌇',greet_n:'Good Night 🌙',search:'Search posts…',w_big:'Tech tips & apps, all in one place',w_stars:'⭐ Premium Sharing',w_note:'✨ Updated daily',qa_all:'All',qa_apps:'Apps',qa_files:'Files',qa_video:'Video',qa_imgs:'Images',popular:'⭐ Popular',services:'Services',t_vpn:'MoeHtet VPN',t_apps:'Apps',t_files:'Files',t_video:'Video',t_imgs:'Images',t_posts:'Latest Posts',t_support:'Support Chat',t_home:'Home',promo_b:'📱 MoeHtet VPN — New',promo_s:'Fast VPN app with MASQUE technology',promo_btn:'Download ⬇️',latest:'📰 Latest Posts',results:'🔎 Results',empty:'Nothing found — try another keyword',no_posts:'No posts yet',loading:'Loading posts…',wait:'Please wait',slow:'Connection is slow — please refresh the page',copy:'🔗 Copy Link',copied:'✅ Copied',btn_app:'⬇️ App Link',btn_file:'📄 Download File',btn_video:'▶️ Watch Video',btn_link:'🔗 Open Link',back:'← View all posts',nav_home:'Home',nav_posts:'Posts',nav_vpn:'VPN App',nav_files:'Files',nav_support:'Support',footer:'© MoeHtet — Tech Sharing'}
+  my:{title:'MoeHtet — နည်းပညာ Sharing',greet_m:'မင်္ဂလာနံနက်ခင်းပါ ☀️',greet_a:'မင်္ဂလာနေ့လယ်ခင်းပါ 🌤️',greet_e:'မင်္ဂလာညနေခင်းပါ 🌇',greet_n:'မင်္ဂလာညချမ်းပါ 🌙',search:'Post ရှာရန်…',w_big:'နည်းပညာ tips နဲ့ app တွေ စုစည်းရာ',w_stars:'⭐ Premium Sharing',w_note:'✨ နေ့တိုင်း Update',qa_all:'အားလုံး',qa_apps:'Apps',qa_files:'Files',qa_video:'Video',qa_imgs:'ပုံများ',popular:'Popular',services:'Services',t_vpn:'MoeHtet VPN',t_apps:'Apps',t_files:'Files',t_video:'Video',t_imgs:'ပုံများ',t_posts:'နောက်ဆုံး Posts',t_support:'Support Chat',t_home:'ပင်မ',promo_b:'📱 MoeHtet VPN — အသစ်',promo_s:'MASQUE နည်းပညာနဲ့ မြန်ဆန်တဲ့ VPN app',promo_btn:'ဒေါင်းလုဒ် ⬇️',latest:'📰 နောက်ဆုံး Post များ',results:'🔎 ရလဒ်များ',empty:'ရှာတာ မတွေ့ဘူး — တခြား စာလုံး စမ်းကြည့်ပါ',no_posts:'ခုထိ post မရှိသေးဘူး',loading:'Post တွေ ယူနေတယ်…',wait:'ခဏစောင့်ပါ',slow:'Connection နှေးနေတယ် — page ကို refresh ပြန်လုပ်ပါ',copy:'🔗 Link ကူးမယ်',copied:'✅ ကူးပြီးပြီ',btn_app:'⬇️ App Link',btn_file:'📄 File ဒေါင်းလုဒ်',btn_video:'▶️ Video ကြည့်ရန်',btn_link:'🔗 Link',back:'← Post အားလုံး ကြည့်မယ်',nav_home:'Home',nav_posts:'Posts',nav_vpn:'VPN App',nav_files:'Files',nav_support:'Support',footer:'© MoeHtet — နည်းပညာ Sharing'},
+  en:{title:'MoeHtet — Tech Sharing',greet_m:'Good Morning ☀️',greet_a:'Good Afternoon 🌤️',greet_e:'Good Evening 🌇',greet_n:'Good Night 🌙',search:'Search posts…',w_big:'Tech tips & apps, all in one place',w_stars:'⭐ Premium Sharing',w_note:'✨ Updated daily',qa_all:'All',qa_apps:'Apps',qa_files:'Files',qa_video:'Video',qa_imgs:'Images',popular:'Popular',services:'Services',t_vpn:'MoeHtet VPN',t_apps:'Apps',t_files:'Files',t_video:'Video',t_imgs:'Images',t_posts:'Latest Posts',t_support:'Support Chat',t_home:'Home',promo_b:'📱 MoeHtet VPN — New',promo_s:'Fast VPN app with MASQUE technology',promo_btn:'Download ⬇️',latest:'📰 Latest Posts',results:'🔎 Results',empty:'Nothing found — try another keyword',no_posts:'No posts yet',loading:'Loading posts…',wait:'Please wait',slow:'Connection is slow — please refresh the page',copy:'🔗 Copy Link',copied:'✅ Copied',btn_app:'⬇️ App Link',btn_file:'📄 Download File',btn_video:'▶️ Watch Video',btn_link:'🔗 Open Link',back:'← View all posts',nav_home:'Home',nav_posts:'Posts',nav_vpn:'VPN App',nav_files:'Files',nav_support:'Support',footer:'© MoeHtet — Tech Sharing'}
 };
 var LANG='my';
 try{ LANG=localStorage.getItem('mh_lang')||'my'; }catch(e){}
