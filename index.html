@@ -6,127 +6,179 @@
 <title>MoeHtet — နည်းပညာ Sharing</title>
 <style>
   :root{
-    --bg:#070812; --panel:rgba(255,255,255,.065); --stroke:rgba(255,255,255,.13);
-    --text:#f8f8fc; --muted:#a9afc0; --gold:#f2c66d; --cyan:#5fd8ff; --violet:#8b5cf6; --green:#25d98b;
+    --blue:#0057d9; --blue2:#0090ff; --ink:#13233d; --muted:#68798f; --soft:#93a5bb;
+    --line:#e2eaf3; --bg:#eef3fa; --gold:#f5a623;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{
-    margin:0; min-height:100vh; color:var(--text); overflow-x:hidden;
+    margin:0; min-height:100vh; color:var(--ink); padding-bottom:86px;
     font-family:Inter,ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    background:
-      radial-gradient(circle at 12% -8%, rgba(95,216,255,.30), transparent 34rem),
-      radial-gradient(circle at 88% 4%, rgba(139,92,246,.28), transparent 32rem),
-      radial-gradient(circle at 50% 115%, rgba(242,198,109,.13), transparent 30rem),
-      linear-gradient(180deg,#080913 0%,#0b0d1a 48%,#070812 100%);
+    background:linear-gradient(180deg,#eaf2fd 0%,#eef3fa 220px,#eef3fa 100%);
   }
-  body::before{
-    content:""; position:fixed; inset:0; pointer-events:none; opacity:.16;
-    background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
-    background-size:44px 44px;
-    mask-image:linear-gradient(to bottom,black,transparent 72%);
+  .wrap{max-width:760px; margin:0 auto}
+  .app-header{
+    color:#fff; padding:24px 16px 22px;
+    background:linear-gradient(155deg,#0052cc 0%,#0070f3 48%,#00a3ff 100%);
+    border-radius:0 0 30px 30px;
+    box-shadow:0 18px 40px rgba(0,87,217,.28);
   }
-  .hero{position:relative; max-width:860px; margin:0 auto; padding:58px 20px 24px; text-align:center}
-  .logo-badge{
-    width:76px; height:76px; margin:0 auto 18px; display:grid; place-items:center;
-    border-radius:24px; font-size:36px; font-weight:900; letter-spacing:-.06em; color:#fff;
-    background:linear-gradient(145deg,rgba(255,255,255,.22),rgba(255,255,255,.05));
-    border:1px solid rgba(255,255,255,.22);
-    box-shadow:0 24px 60px rgba(95,216,255,.20), inset 0 1px 0 rgba(255,255,255,.35);
-    backdrop-filter:blur(18px);
+  .greet-row{display:flex; align-items:center; justify-content:space-between; gap:12px}
+  .greet-left{display:flex; align-items:center; gap:12px}
+  .avatar{
+    width:47px; height:47px; border-radius:50%; display:grid; place-items:center;
+    background:rgba(255,255,255,.20); border:1.5px solid rgba(255,255,255,.55);
+    font-size:21px; font-weight:900;
   }
-  .eyebrow{color:var(--gold); font-size:11px; font-weight:800; letter-spacing:.24em; text-transform:uppercase}
-  .hero h1{
-    margin:12px 0 0; font-size:clamp(44px,9vw,76px); line-height:.98; letter-spacing:-.055em; font-weight:900;
+  .greet{font-size:13px; opacity:.88}
+  .gname{font-size:19px; font-weight:850; letter-spacing:-.01em; margin-top:2px}
+  .star-pill{
+    padding:8px 12px; border-radius:999px; font-size:12.5px; font-weight:800;
+    background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.35);
   }
-  .hero h1 span{
-    background:linear-gradient(92deg,var(--cyan),#a78bfa 48%,var(--gold));
-    -webkit-background-clip:text; background-clip:text; color:transparent;
+  .wallet-card{
+    margin-top:19px; padding:17px; border-radius:23px;
+    background:linear-gradient(140deg,rgba(255,255,255,.24),rgba(255,255,255,.10));
+    border:1px solid rgba(255,255,255,.38);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
+    backdrop-filter:blur(10px);
   }
-  .hero p{max-width:640px; margin:16px auto 0; color:#c6cad6; font-size:16px; line-height:1.85}
-  .hero-pills{display:flex; justify-content:center; flex-wrap:wrap; gap:9px; margin-top:24px}
-  .hero-pills span{
-    padding:8px 13px; border-radius:999px; color:#e9ecf5; font-size:13px;
-    background:rgba(255,255,255,.065); border:1px solid rgba(255,255,255,.11);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.08); backdrop-filter:blur(14px);
+  .w-label{font-size:11px; font-weight:800; letter-spacing:.20em; opacity:.85}
+  .w-big{font-size:20px; font-weight:850; margin-top:8px; line-height:1.45}
+  .w-chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:13px}
+  .w-chips span{padding:6px 11px; border-radius:999px; background:rgba(255,255,255,.20); font-size:12.5px; font-weight:600}
+  .quick{display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-top:20px}
+  .qa{
+    background:none; border:0; cursor:pointer; color:#fff; padding:0;
+    display:flex; flex-direction:column; align-items:center; gap:7px;
+    font-size:12px; font-weight:600; font-family:inherit;
   }
-  main{position:relative; max-width:760px; margin:0 auto; padding:12px 16px 58px}
+  .qa-ic{
+    width:52px; height:52px; border-radius:50%; display:grid; place-items:center;
+    background:#fff; font-size:22px; box-shadow:0 8px 18px rgba(0,40,100,.22);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .qa.active .qa-ic{box-shadow:0 0 0 3px var(--gold),0 10px 20px rgba(0,40,100,.28); transform:translateY(-2px)}
+  .qa.active{font-weight:850}
+  .popular{max-width:760px; margin:0 auto; padding:20px 16px 0}
+  .sec-title{font-size:17px; font-weight:850; color:var(--ink); margin:4px 2px 12px}
+  .pop-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:11px}
+  .tile{
+    background:#fff; border:1px solid var(--line); border-radius:20px; padding:15px 6px 13px;
+    text-align:center; text-decoration:none; color:var(--ink);
+    box-shadow:0 8px 22px rgba(19,35,61,.06);
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    font-size:12.5px; font-weight:650; line-height:1.35;
+  }
+  .t-ic{font-size:26px}
+  main{max-width:760px; margin:0 auto; padding:8px 16px 26px}
   .card{
-    position:relative; overflow:hidden; margin-top:18px; padding:23px;
-    border-radius:26px; border:1px solid var(--stroke);
-    background:linear-gradient(155deg,rgba(255,255,255,.095),rgba(255,255,255,.038));
-    box-shadow:0 24px 70px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.09);
-    backdrop-filter:blur(18px);
+    background:#fff; margin-top:14px; padding:20px; border-radius:24px;
+    border:1px solid var(--line); box-shadow:0 10px 28px rgba(19,35,61,.07);
   }
-  .card::before{
-    content:""; position:absolute; inset:0 0 auto; height:1px;
-    background:linear-gradient(90deg,transparent,rgba(95,216,255,.65),rgba(242,198,109,.55),transparent);
-  }
-  .meta-row{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:13px}
+  .meta-row{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:11px}
   .tag{
     display:inline-flex; align-items:center; padding:6px 11px; border-radius:999px;
-    color:#ffe1a1; background:rgba(242,198,109,.12); border:1px solid rgba(242,198,109,.24);
-    font-size:12px; font-weight:700;
+    color:var(--blue); background:#e7f0ff; font-size:12px; font-weight:750;
   }
-  .date{color:#8f96a9; font-size:12px; white-space:nowrap}
-  .card h2{margin:0; font-size:23px; line-height:1.35; letter-spacing:-.02em}
-  .card p{color:#dde1eb; line-height:1.85; margin:11px 0 0; white-space:pre-wrap; word-break:break-word; font-size:15.5px}
+  .date{color:var(--soft); font-size:12px; white-space:nowrap}
+  .card h2{margin:0; font-size:21px; line-height:1.4; letter-spacing:-.01em; color:var(--ink)}
+  .card p{color:#46566e; line-height:1.85; margin:10px 0 0; white-space:pre-wrap; word-break:break-word; font-size:15.5px}
   .btn{
     display:inline-flex; align-items:center; justify-content:center; min-height:44px;
-    background:linear-gradient(135deg,#2f7bff,#7657ff); color:#fff; text-decoration:none;
+    background:linear-gradient(135deg,var(--blue),var(--blue2)); color:#fff; text-decoration:none;
     padding:11px 18px; border-radius:999px; font-weight:800; font-size:14px;
-    box-shadow:0 14px 30px rgba(63,105,255,.28);
+    box-shadow:0 10px 22px rgba(0,87,217,.25);
   }
-  .btn.file{background:linear-gradient(135deg,#0dbd78,#079669); box-shadow:0 14px 30px rgba(16,185,129,.22)}
-  .btn.video{background:linear-gradient(135deg,#8b5cf6,#d946ef); box-shadow:0 14px 30px rgba(168,85,247,.24)}
-  .img{width:100%; border-radius:19px; margin-top:16px; background:#222; border:1px solid rgba(255,255,255,.10); display:block}
-  .card iframe{box-shadow:0 18px 45px rgba(0,0,0,.28)}
-  .actions{display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-top:17px}
+  .btn.file{background:linear-gradient(135deg,#0dbd78,#079669); box-shadow:0 10px 22px rgba(16,185,129,.22)}
+  .btn.video{background:linear-gradient(135deg,#8b5cf6,#c026d3); box-shadow:0 10px 22px rgba(168,85,247,.22)}
+  .img{width:100%; border-radius:17px; margin-top:14px; background:#dfe8f2; border:1px solid var(--line); display:block}
+  .actions{display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin-top:16px}
   .sharebtn{
-    min-height:42px; background:rgba(255,255,255,.065); color:#cfe9ff; border:1px solid rgba(255,255,255,.13);
-    border-radius:999px; padding:9px 15px; font-size:13px; font-weight:700; cursor:pointer;
+    min-height:42px; background:#eef4fc; color:var(--blue); border:1px solid #d7e5f6;
+    border-radius:999px; padding:9px 15px; font-size:13px; font-weight:750; cursor:pointer; font-family:inherit;
   }
-  .allink{color:#9fd8ff; font-size:15px; font-weight:700; text-decoration:none}
+  .allink{color:var(--blue); font-size:15px; font-weight:750; text-decoration:none}
   .state-card{
-    margin-top:18px; padding:34px 20px; text-align:center; color:#d9dde8;
-    border-radius:26px; border:1px solid var(--stroke); background:rgba(255,255,255,.055);
-    box-shadow:0 24px 70px rgba(0,0,0,.25); backdrop-filter:blur(18px);
+    margin-top:16px; padding:32px 20px; text-align:center; color:var(--ink);
+    border-radius:24px; border:1px solid var(--line); background:#fff;
+    box-shadow:0 10px 28px rgba(19,35,61,.07);
   }
   .state-card small{display:block; margin-top:7px; color:var(--muted)}
   .spinner{
     width:38px; height:38px; margin:0 auto 15px; border-radius:50%;
-    border:3px solid rgba(255,255,255,.14); border-top-color:var(--cyan);
+    border:3px solid #dbe8f8; border-top-color:var(--blue);
     animation:spin .8s linear infinite;
   }
   @keyframes spin{to{transform:rotate(360deg)}}
   #feed > p{
-    margin-top:18px; padding:30px 20px !important; text-align:center;
-    border-radius:26px; border:1px solid var(--stroke); background:rgba(255,255,255,.055);
-    color:#c9cedb !important; box-shadow:0 24px 70px rgba(0,0,0,.25);
+    margin-top:16px; padding:28px 20px !important; text-align:center;
+    border-radius:24px; border:1px solid var(--line); background:#fff;
+    color:var(--muted) !important; box-shadow:0 10px 28px rgba(19,35,61,.07);
   }
-  footer{position:relative; text-align:center; color:#747b8d; font-size:13px; padding:8px 20px 30px}
+  footer{text-align:center; color:var(--soft); font-size:13px; padding:6px 20px 14px}
+  .bottom-nav{
+    position:fixed; left:0; right:0; bottom:0; z-index:50;
+    background:rgba(255,255,255,.94); backdrop-filter:blur(14px);
+    border-top:1px solid var(--line); box-shadow:0 -8px 24px rgba(19,35,61,.06);
+  }
+  .bn-in{max-width:760px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr)}
+  .bn-in a{
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+    padding:9px 0 11px; text-decoration:none; color:var(--muted);
+    font-size:11.5px; font-weight:650;
+  }
+  .bn-in a span{font-size:21px}
+  .bn-in a.active{color:var(--blue); font-weight:850}
   @media (max-width:600px){
-    .hero{padding-top:42px}
-    .logo-badge{width:66px;height:66px;border-radius:21px;font-size:31px}
-    .hero p{font-size:15px}
-    .card{padding:19px; border-radius:23px}
-    .card h2{font-size:21px}
-    .btn,.sharebtn{width:auto}
+    .qa-ic{width:47px;height:47px;font-size:20px}
+    .gname{font-size:17.5px}
+    .w-big{font-size:18.5px}
+    .card{padding:18px}
+    .pop-grid{gap:9px}
+    .tile{font-size:11.5px; padding:13px 4px 11px}
+    .t-ic{font-size:23px}
   }
 </style>
 </head>
 <body>
-<header class="hero">
-  <div class="logo-badge">M</div>
-  <div class="eyebrow">MoeHtet • Tech Sharing</div>
-  <h1>MoeHtet <span>Tech</span></h1>
-  <p>နည်းပညာ tips, app တွေနဲ့ အသုံးဝင်တဲ့ sharing တွေကို တစ်နေရာတည်းမှာ စုစည်းထားတဲ့ premium space</p>
-  <div class="hero-pills"><span>⚡ မြန်ဆန်</span><span>📱 Mobile First</span><span>✨ နေ့တိုင်း Update</span></div>
-</header>
+<header class="app-header"><div class="wrap">
+  <div class="greet-row">
+    <div class="greet-left"><div class="avatar">M</div><div><div class="greet">မင်္ဂလာပါ 👋</div><div class="gname">MoeHtet Tech Sharing</div></div></div>
+    <div class="star-pill">⭐ Premium</div>
+  </div>
+  <div class="wallet-card">
+    <div class="w-label">TECH SHARING WALLET</div>
+    <div class="w-big">နည်းပညာ tips နဲ့ app တွေ စုစည်းရာ</div>
+    <div class="w-chips"><span>⚡ မြန်ဆန်</span><span>📱 Mobile First</span><span>✨ နေ့တိုင်း Update</span></div>
+  </div>
+  <div class="quick">
+    <button class="qa active" onclick="setFilter(this,'')"><span class="qa-ic">🧾</span><span>အားလုံး</span></button>
+    <button class="qa" onclick="setFilter(this,'App')"><span class="qa-ic">⬇️</span><span>Apps</span></button>
+    <button class="qa" onclick="setFilter(this,'File')"><span class="qa-ic">📄</span><span>Files</span></button>
+    <button class="qa" onclick="setFilter(this,'Video')"><span class="qa-ic">▶️</span><span>Video</span></button>
+    <button class="qa" onclick="setFilter(this,'ပုံ')"><span class="qa-ic">🖼️</span><span>ပုံများ</span></button>
+  </div>
+</div></header>
+<section class="popular">
+  <div class="sec-title">⭐ Popular</div>
+  <div class="pop-grid">
+    <a class="tile" href="https://github.com/moehtetdata/moehtet/releases/download/v0.3.3/MoeHtet.apk" target="_blank" rel="noopener"><span class="t-ic">📱</span><span>MoeHtet VPN</span></a>
+    <a class="tile" href="https://moehtet.pages.dev" target="_blank" rel="noopener"><span class="t-ic">🛒</span><span>MoeHtet Shop</span></a>
+    <a class="tile" href="#feed"><span class="t-ic">📰</span><span>နောက်ဆုံး Posts</span></a>
+    <a class="tile" href="#" onclick="openSupport(event)"><span class="t-ic">💬</span><span>Support Chat</span></a>
+  </div>
+</section>
 <main id="feed">
   <div class="state-card"><div class="spinner"></div><div>Post တွေ ယူနေတယ်…</div><small>ခဏစောင့်ပါ</small></div>
 </main>
 <footer>© MoeHtet — နည်းပညာ Sharing</footer>
+<nav class="bottom-nav"><div class="bn-in">
+  <a href="./" class="active"><span>🏠</span>Home</a>
+  <a href="#feed"><span>📰</span>Posts</a>
+  <a href="https://moehtet.pages.dev" target="_blank" rel="noopener"><span>🛒</span>Shop</a>
+  <a href="https://github.com/moehtetdata/moehtet/releases/download/v0.3.3/MoeHtet.apk" target="_blank" rel="noopener"><span>⬇️</span>VPN App</a>
+</div></nav>
 <script>
 var API = 'https://script.google.com/macros/s/AKfycbyeXvBLYcbe038_QFTxiwulGH-oVbgsXI5_9VZ025MjfMaVGlRa_2QUX-0T6LTQeaxG8w/exec';
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -146,14 +198,32 @@ function cardHtml(p){
   var share=p.id? '<button class="sharebtn" onclick="copyLink(this,\''+esc(p.id)+'\')">🔗 Link ကူးမယ်</button>' : '';
   return '<article class="card"><div class="meta-row"><span class="tag">'+esc(p.type)+'</span>'+ds+'</div><h2>'+esc(p.title)+'</h2><p>'+esc(p.body)+'</p>'+media+'<div class="actions">'+(media?'':btnFor(p))+share+'</div></article>';
 }
-function render(posts){
-  if(!posts || !posts.length) return;
-  var h='';
-  for(var i=0;i<posts.length;i++) h+=cardHtml(posts[i]);
-  document.getElementById('feed').innerHTML=h;
+var allPosts=[];
+var curFilter='';
+function render(posts){ renderFeed(); }
+function renderFeed(){
+  var list=[];
+  for(var i=0;i<allPosts.length;i++){ if(!curFilter || allPosts[i].type.indexOf(curFilter)>-1) list.push(allPosts[i]); }
+  var feed=document.getElementById('feed');
+  if(!list.length){ feed.innerHTML='<p>ဒီ အမျိုးအစားမှာ post မရှိသေးဘူး</p>'; return; }
+  var h='<div class="sec-title" style="margin-top:20px">📰 နောက်ဆုံး Post များ</div>';
+  for(var j=0;j<list.length;j++) h+=cardHtml(list[j]);
+  feed.innerHTML=h;
+}
+function setFilter(btn,f){
+  curFilter=f;
+  var btns=document.querySelectorAll('.qa');
+  for(var i=0;i<btns.length;i++) btns[i].classList.remove('active');
+  if(btn) btn.classList.add('active');
+  if(allPosts.length) renderFeed();
+}
+function openSupport(e){
+  if(e) e.preventDefault();
+  if(window.Tawk_API && Tawk_API.maximize) Tawk_API.maximize();
 }
 function start(posts){
   loaded=true;
+  allPosts=posts||[];
   if(!posts || !posts.length){
     document.getElementById('feed').innerHTML='<p style="text-align:center;color:#aaa;padding:36px 0">ခုထိ post မရှိသေးဘူး</p>';
     return;

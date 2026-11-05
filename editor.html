@@ -6,149 +6,130 @@
 <title>Post တင်ရန် — MoeHtet Sharing</title>
 <style>
   :root{
-    --bg:#070812; --panel:rgba(255,255,255,.065); --stroke:rgba(255,255,255,.13);
-    --text:#f8f8fc; --muted:#a9afc0; --gold:#f2c66d; --cyan:#5fd8ff; --violet:#8b5cf6;
+    --blue:#0057d9; --blue2:#0090ff; --ink:#13233d; --muted:#68798f; --soft:#93a5bb;
+    --line:#e2eaf3; --bg:#eef3fa;
   }
   *{box-sizing:border-box}
   body{
-    margin:0; min-height:100vh; color:var(--text); overflow-x:hidden;
+    margin:0; min-height:100vh; color:var(--ink);
     font-family:Inter,ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    background:
-      radial-gradient(circle at 10% -10%, rgba(95,216,255,.27), transparent 32rem),
-      radial-gradient(circle at 92% 0%, rgba(139,92,246,.25), transparent 30rem),
-      radial-gradient(circle at 50% 115%, rgba(242,198,109,.11), transparent 28rem),
-      linear-gradient(180deg,#080913,#0b0d1a 52%,#070812);
+    background:linear-gradient(180deg,#eaf2fd 0%,#eef3fa 260px,#eef3fa 100%);
   }
-  body::before{
-    content:""; position:fixed; inset:0; pointer-events:none; opacity:.13;
-    background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
-    background-size:44px 44px; mask-image:linear-gradient(to bottom,black,transparent 75%);
-  }
-  main{position:relative; max-width:760px; margin:0 auto; padding:34px 16px 52px}
-  h1{font-size:29px; line-height:1.2; letter-spacing:-.03em; margin:0}
-  h2{font-size:20px; margin:30px 0 4px; letter-spacing:-.02em}
+  main{position:relative; max-width:760px; margin:0 auto; padding:30px 16px 52px}
+  h1{font-size:29px; line-height:1.2; letter-spacing:-.03em; margin:0; color:var(--ink)}
+  h2{font-size:20px; margin:30px 0 4px; letter-spacing:-.02em; color:var(--ink)}
   .brand-mark{
     width:62px; height:62px; display:grid; place-items:center; border-radius:20px;
     font-size:29px; font-weight:900; color:#fff; margin-bottom:16px;
-    background:linear-gradient(145deg,rgba(255,255,255,.22),rgba(255,255,255,.05));
-    border:1px solid rgba(255,255,255,.22); box-shadow:0 20px 48px rgba(95,216,255,.18);
+    background:linear-gradient(140deg,var(--blue),var(--blue2));
+    box-shadow:0 16px 34px rgba(0,87,217,.30);
   }
-  .eyebrow{color:var(--gold); font-size:11px; font-weight:800; letter-spacing:.22em; text-transform:uppercase; margin-bottom:9px}
+  .eyebrow{color:var(--blue); font-size:11px; font-weight:800; letter-spacing:.22em; text-transform:uppercase; margin-bottom:9px}
   .sub{color:var(--muted); line-height:1.7; margin:9px 0 0}
   .panel{
-    margin-top:18px; padding:21px; border-radius:26px;
-    background:linear-gradient(155deg,rgba(255,255,255,.09),rgba(255,255,255,.037));
-    border:1px solid var(--stroke);
-    box-shadow:0 24px 70px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.09);
-    backdrop-filter:blur(18px);
+    position:relative; overflow:hidden; margin-top:18px; padding:21px; border-radius:26px;
+    background:#fff; border:1px solid var(--line);
+    box-shadow:0 12px 32px rgba(19,35,61,.08);
   }
-  label{display:block;margin-top:16px;color:#c9cedd;font-size:14px;font-weight:700}
+  .panel::before{
+    content:""; position:absolute; inset:0 0 auto; height:1px;
+    background:linear-gradient(90deg,transparent,rgba(0,144,255,.55),rgba(139,92,246,.40),transparent);
+  }
+  label{display:block; margin-top:16px; color:#33465f; font-size:14px; font-weight:700}
   label:first-child{margin-top:0}
   input,textarea,select{
     width:100%; margin-top:8px; padding:13px 14px; border-radius:15px;
-    border:1px solid rgba(255,255,255,.13); background:rgba(5,7,15,.52); color:#fff;
+    border:1px solid #d9e4f0; background:#f7fafd; color:var(--ink);
     font-size:16px; outline:none; transition:border-color .18s, box-shadow .18s, background .18s;
   }
-  input:focus,textarea:focus,select:focus{border-color:rgba(95,216,255,.68); box-shadow:0 0 0 4px rgba(95,216,255,.13); background:rgba(5,7,15,.72)}
+  input:focus,textarea:focus,select:focus{border-color:rgba(0,112,243,.65); box-shadow:0 0 0 4px rgba(0,112,243,.13); background:#fff}
   textarea{min-height:132px; resize:vertical; line-height:1.65}
-  select option{background:#121524;color:#fff}
+  select option{background:#fff; color:var(--ink)}
   button{
     width:100%; margin-top:19px; padding:15px 18px; border:0; border-radius:999px; cursor:pointer;
-    background:linear-gradient(135deg,#2f7bff,#7657ff); color:#fff; font-size:16px; font-weight:850;
-    box-shadow:0 16px 34px rgba(63,105,255,.27);
+    background:linear-gradient(135deg,var(--blue),var(--blue2)); color:#fff; font-size:16px; font-weight:850;
+    box-shadow:0 14px 30px rgba(0,87,217,.26); font-family:inherit;
   }
   button:disabled{opacity:.5}
   .note{
-    background:linear-gradient(135deg,rgba(37,217,139,.13),rgba(95,216,255,.08));
-    border:1px solid rgba(37,217,139,.25); color:#c9f2dc; border-radius:19px;
+    background:#e9f7ef; border:1px solid #bfe8cf; color:#1d6b41; border-radius:19px;
     padding:13px 15px; font-size:14px; line-height:1.65; margin-top:17px;
   }
-  .err{background:rgba(255,92,92,.10); border:1px solid rgba(255,92,92,.28); color:#ffc4c4; border-radius:15px; padding:11px 14px; font-size:14px; margin-top:14px}
-  #status,#upstatus{margin-top:13px; font-size:14.5px; line-height:1.6; color:#e6e9f2}
-  .post{
-    background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.10);
-    border-radius:19px; padding:15px; margin-top:11px;
-  }
-  .post b{font-size:15.5px; line-height:1.45} .post span{color:#ffe1a1; font-size:12px; font-weight:800}
-  .post div{color:#9299ac; font-size:12px; margin-top:4px}
+  .err{background:#fdeeee; border:1px solid #f5c6c6; color:#a33; border-radius:15px; padding:11px 14px; font-size:14px; margin-top:14px}
+  #status,#upstatus{margin-top:13px; font-size:14.5px; line-height:1.6; color:#33465f}
+  .post{background:#f7fafd; border:1px solid var(--line); border-radius:19px; padding:15px; margin-top:11px}
+  .post b{font-size:15.5px; line-height:1.45; color:var(--ink)} .post span{color:#b7791f; font-size:12px; font-weight:800}
+  .post div{color:var(--soft); font-size:12px; margin-top:4px}
   .del,.cpy{width:auto; min-height:39px; margin-top:11px; padding:8px 14px; font-size:13.5px; box-shadow:none}
-  .del{background:rgba(255,92,92,.11); color:#ffabab; border:1px solid rgba(255,92,92,.30)}
-  .cpy{margin-right:8px; background:rgba(95,216,255,.10); color:#aee7ff; border:1px solid rgba(95,216,255,.28)}
-  .imgprev{width:100%; border-radius:18px; margin-top:14px; border:1px solid rgba(255,255,255,.12)}
+  .del{background:#fdeeee; color:#c04545; border:1px solid #f0bcbc}
+  .cpy{margin-right:8px; background:#e7f0ff; color:var(--blue); border:1px solid #c9defc}
+  .imgprev{width:100%; border-radius:18px; margin-top:14px; border:1px solid var(--line)}
   input[type=file]{padding:11px; border-style:dashed; cursor:pointer}
-  a{color:#9fd8ff; font-weight:700}
+  a{color:var(--blue); font-weight:700}
   #login{
-    position:relative; max-width:410px; margin:7vh auto 40px; padding:28px;
-    border-radius:29px; background:linear-gradient(155deg,rgba(255,255,255,.10),rgba(255,255,255,.04));
-    border:1px solid var(--stroke); box-shadow:0 28px 80px rgba(0,0,0,.38);
-    backdrop-filter:blur(20px);
+    position:relative; overflow:hidden; max-width:410px; margin:7vh auto 40px; padding:28px;
+    border-radius:29px; background:#fff;
+    border:1px solid var(--line); box-shadow:0 24px 60px rgba(19,35,61,.14);
+  }
+  #login::before{
+    content:""; position:absolute; inset:0 0 auto; height:3px;
+    background:linear-gradient(90deg,var(--blue),var(--blue2),#f5a623);
   }
   #login h1{font-size:27px}
-  #fpbtn{background:rgba(95,216,255,.11) !important; border:1px solid rgba(95,216,255,.30) !important; box-shadow:none}
+  #fpbtn{background:#e7f0ff !important; border:1px solid #c9defc !important; color:var(--blue); box-shadow:none}
   .site-link{text-align:center; margin-top:22px}
-  #login{overflow:hidden}
-  #login::before{
-    content:""; position:absolute; inset:0 0 auto; height:1px;
-    background:linear-gradient(90deg,transparent,rgba(95,216,255,.75),rgba(242,198,109,.65),transparent);
-  }
   .studio-hero{
-    position:relative; overflow:hidden; padding:24px; border-radius:30px;
-    background:
-      radial-gradient(circle at 88% 0%, rgba(242,198,109,.20), transparent 15rem),
-      radial-gradient(circle at 0% 0%, rgba(95,216,255,.18), transparent 16rem),
-      linear-gradient(155deg,rgba(255,255,255,.11),rgba(255,255,255,.04));
-    border:1px solid rgba(255,255,255,.14);
-    box-shadow:0 28px 80px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.10);
-    backdrop-filter:blur(20px);
+    position:relative; overflow:hidden; padding:24px; border-radius:30px; color:#fff;
+    background:linear-gradient(155deg,#0052cc 0%,#0070f3 48%,#00a3ff 100%);
+    box-shadow:0 22px 50px rgba(0,87,217,.30);
   }
+  .studio-hero h1{color:#fff}
+  .studio-hero .eyebrow{color:#ffd97a}
+  .studio-hero .sub{color:rgba(255,255,255,.88)}
   .studio-top{display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:22px}
   .studio-brand{display:flex; align-items:center; gap:11px; font-weight:900; letter-spacing:-.02em}
   .mini-mark{
     width:43px; height:43px; display:grid; place-items:center; border-radius:14px;
-    background:linear-gradient(145deg,rgba(255,255,255,.24),rgba(255,255,255,.06));
-    border:1px solid rgba(255,255,255,.22); font-size:20px; font-weight:900;
+    background:rgba(255,255,255,.20); border:1px solid rgba(255,255,255,.40);
+    font-size:20px; font-weight:900; color:#fff;
   }
   .live-pill{
     display:inline-flex; align-items:center; padding:7px 11px; border-radius:999px;
-    color:#a7f3d0; background:rgba(37,217,139,.11); border:1px solid rgba(37,217,139,.27);
+    color:#d2ffe4; background:rgba(37,217,139,.20); border:1px solid rgba(120,255,190,.45);
     font-size:11px; font-weight:900; letter-spacing:.13em;
   }
   .studio-hero h1{font-size:clamp(30px,7vw,44px)}
   .studio-hero .sub{max-width:560px; font-size:15px}
   .feature-row{display:flex; flex-wrap:wrap; gap:9px; margin-top:20px}
   .feature-row span{
-    padding:8px 12px; border-radius:999px; font-size:13px; color:#eceff7;
-    background:rgba(255,255,255,.065); border:1px solid rgba(255,255,255,.11);
-  }
-  .panel{position:relative; overflow:hidden}
-  .panel::before{
-    content:""; position:absolute; inset:0 0 auto; height:1px;
-    background:linear-gradient(90deg,transparent,rgba(95,216,255,.55),rgba(139,92,246,.45),transparent);
+    padding:8px 12px; border-radius:999px; font-size:13px; color:#fff;
+    background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.30);
   }
   .form-head,.panel-head{display:flex; align-items:flex-start; justify-content:space-between; gap:14px; margin-bottom:6px}
   .form-head h2,.panel-head h2{margin:0; font-size:20px}
   .form-head p,.panel-head p{margin:6px 0 0; color:var(--muted); font-size:13.5px; line-height:1.6}
   .form-icon,.library-icon{
     flex:0 0 auto; width:44px; height:44px; display:grid; place-items:center; border-radius:15px;
-    background:rgba(95,216,255,.11); border:1px solid rgba(95,216,255,.22); font-size:20px;
+    background:#e7f0ff; border:1px solid #c9defc; font-size:20px;
   }
   .upload-label{
-    padding:16px; border:1px dashed rgba(95,216,255,.38); border-radius:20px;
-    background:linear-gradient(145deg,rgba(95,216,255,.09),rgba(139,92,246,.07));
+    padding:16px; border:1px dashed #9cc2f5; border-radius:20px;
+    background:linear-gradient(145deg,#eef5ff,#f4f9ff);
   }
-  .upload-label input{border:0; background:rgba(5,7,15,.45); margin-top:12px}
+  .upload-label input{border:0; background:#fff; margin-top:12px}
   #pub{
     min-height:54px; font-size:17px;
-    background:linear-gradient(135deg,#1687ff,#7657ff 55%,#b7791f);
-    box-shadow:0 18px 38px rgba(63,105,255,.30);
+    background:linear-gradient(135deg,var(--blue),var(--blue2) 60%,#7a4de8);
+    box-shadow:0 16px 34px rgba(0,87,217,.28);
   }
   .secure-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:17px}
-  .secure-row span{padding:7px 10px; border-radius:999px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.10); color:#cdd3e2; font-size:12px}
+  .secure-row span{padding:7px 10px; border-radius:999px; background:#eef4fc; border:1px solid var(--line); color:#44566e; font-size:12px}
   @media (max-width:600px){
-    main{padding-top:26px}
+    main{padding-top:24px}
     .panel{padding:18px; border-radius:23px}
     #login{margin:28px 14px 36px; padding:24px}
     h1{font-size:26px}
+    .studio-hero{padding:20px}
   }
 </style>
 </head>
@@ -163,8 +144,8 @@
   <button onclick="doLogin()">ဝင်မယ်</button>
   <div id="lerr" class="err" style="display:none">Username / Password မှားနေတယ်</div>
   <button id="fpbtn" onclick="loginFingerprint()" style="display:none;background:#20303a;border:1px solid #30506b;margin-top:14px">👆 Fingerprint နဲ့ ဝင်မယ်</button>
-  <button onclick="enrollFingerprint()" style="background:transparent;border:0;color:#9fb4ff;font-size:14px;margin-top:8px">🔐 Fingerprint မှတ်ထားမယ် (အသစ်)</button>
-  <div id="fpstatus" style="margin-top:10px;font-size:14px;color:#bbb"></div>
+  <button onclick="enrollFingerprint()" style="background:transparent;border:0;color:#0057d9;font-size:14px;margin-top:8px;box-shadow:none">🔐 Fingerprint မှတ်ထားမယ် (အသစ်)</button>
+  <div id="fpstatus" style="margin-top:10px;font-size:14px;color:#68798f"></div>
   <div class="secure-row"><span>🔐 Private Editor</span><span>☁️ Cloud Posts</span><span>⚡ Fast Publish</span></div>
 </div>
 <main id="app" style="display:none">
@@ -190,7 +171,7 @@
   </label>
   <label>စာသား <textarea id="body" placeholder="မျှဝေချင်တာ ရေးပါ…"></textarea></label>
   <label>Link (ပုံ / App / File / Video ရှိရင်) <input id="link" placeholder="https://…"></label>
-  <label class="upload-label">📷🎬 ပုံ / Video တို တင်ရန် <span style="display:block;margin-top:5px;color:#a9afc0;font-weight:500">ဖုန်းထဲက ရွေးလိုက်ရင် အလိုအလျောက် upload လုပ်ပေးမယ်</span> <input id="imgfile" type="file" accept="image/*,video/*" onchange="uploadImage(this)"></label>
+  <label class="upload-label">📷🎬 ပုံ / Video တို တင်ရန် <span style="display:block;margin-top:5px;color:#68798f;font-weight:500">ဖုန်းထဲက ရွေးလိုက်ရင် အလိုအလျောက် upload လုပ်ပေးမယ်</span> <input id="imgfile" type="file" accept="image/*,video/*" onchange="uploadImage(this)"></label>
   <div id="upstatus" style="margin-top:8px;font-size:14px"></div>
   <img id="preview" class="imgprev" style="display:none" alt="">
   <button id="pub" onclick="publish()">📢 Publish တင်မယ်</button>
