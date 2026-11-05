@@ -186,7 +186,7 @@
 <body>
 <div class="wrap">
   <div class="greet-row">
-    <div class="greet-left"><div class="avatar">M</div><div><div class="greet">မင်္ဂလာပါ 👋</div><div class="gname">MoeHtet Tech Sharing</div></div></div>
+    <div class="greet-left"><div class="avatar">M</div><div><div class="greet" id="greetText">မင်္ဂလာပါ 👋</div><div class="gname">MoeHtet Tech Sharing</div></div></div>
     <div class="star-pill" id="pointsPill">⭐ 0P</div>
   </div>
   <div class="searchbar"><span>🔍</span><input id="search" type="search" placeholder="Post ရှာရန်…" oninput="onSearch(this)"></div>
@@ -319,6 +319,16 @@ function copyLink(btn,id){
   else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(done, function(){ btn.textContent=url; }); }
   else { btn.textContent=url; }
 }
+(function(){
+  var gel=document.getElementById('greetText');
+  if(gel){
+    var h=new Date().getHours();
+    gel.textContent = (h>=5 && h<12) ? 'မင်္ဂလာနံနက်ခင်းပါ ☀️'
+      : (h>=12 && h<16) ? 'မင်္ဂလာနေ့လယ်ခင်းပါ 🌤️'
+      : (h>=16 && h<19) ? 'မင်္ဂလာညနေခင်းပါ 🌇'
+      : 'မင်္ဂလာညချမ်းပါ 🌙';
+  }
+})();
 (function(){
   var pts=1;
   try{ pts=(parseInt(localStorage.getItem('mh_points')||'0',10)||0)+1; localStorage.setItem('mh_points',String(pts)); }catch(e){}
