@@ -222,7 +222,7 @@ function loadList(){
     for(var i=0;i<res.posts.length;i++){
       var p=res.posts[i];
       var d=p.ts? new Date(p.ts).toLocaleDateString('en-GB'):'';
-      h+='<div class="post"><span>'+esc(p.type)+'</span> <b>'+esc(p.title)+'</b><div>'+d+'</div>'+(p.id? '<button class="cpy" onclick="copyPostLink(\''+p.id+'\')">🔗 Link ကူးမယ်</button>' : '')+(p.row? '<button class="del" onclick="delPost('+p.row+')">🗑️ ဖျက်မယ်</button>' : '')+'</div>';
+      h+='<div class="post"><span>'+esc(p.type)+'</span> <b>'+esc(p.title)+'</b><div>'+d+' · 👁 '+(p.views||0)+' views</div>'+(p.id? '<button class="cpy" onclick="copyPostLink(\''+p.id+'\')">🔗 Link ကူးမယ်</button>' : '')+(p.row? '<button class="del" onclick="delPost('+p.row+')">🗑️ ဖျက်မယ်</button>' : '')+'</div>';
     }
     el.innerHTML=h;
   });
