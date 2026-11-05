@@ -30,6 +30,16 @@
     padding:8px 12px; border-radius:999px; font-size:12.5px; font-weight:800; color:#9a6a00;
     background:#fff3d6; border:1px solid #ffe1a1;
   }
+  .top-right{display:flex; flex-direction:column; align-items:flex-end; gap:8px}
+  .lang-switch{
+    display:flex; background:#fff; border:1px solid var(--line); border-radius:999px; padding:3px;
+    box-shadow:0 6px 16px rgba(19,35,61,.06);
+  }
+  .lang-switch button{
+    border:0; background:none; padding:6px 12px; border-radius:999px; cursor:pointer;
+    font-weight:750; font-size:12.5px; color:var(--muted); font-family:inherit;
+  }
+  .lang-switch button.on{background:linear-gradient(135deg,var(--blue),var(--blue2)); color:#fff}
   .searchbar{
     margin-top:16px; display:flex; align-items:center; gap:9px;
     background:#fff; border:1px solid var(--line); border-radius:999px; padding:0 16px;
@@ -187,56 +197,56 @@
 <div class="wrap">
   <div class="greet-row">
     <div class="greet-left"><div class="avatar">M</div><div><div class="greet" id="greetText">မင်္ဂလာပါ 👋</div><div class="gname">MoeHtet Tech Sharing</div></div></div>
-    <div class="star-pill" id="pointsPill">⭐ 0P</div>
+    <div class="top-right"><div class="lang-switch"><button id="langMy" onclick="setLang('my')">မြန်မာ</button><button id="langEn" onclick="setLang('en')">EN</button></div><div class="star-pill" id="pointsPill">⭐ 0P</div></div>
   </div>
   <div class="searchbar"><span>🔍</span><input id="search" type="search" placeholder="Post ရှာရန်…" oninput="onSearch(this)"></div>
   <div class="balance-card">
-    <div class="w-label">MOEHTET TECH SHARING</div>
-    <div class="w-big">နည်းပညာ tips နဲ့ app တွေ စုစည်းရာ</div>
-    <div class="w-row"><span class="w-stars">⭐ Premium Sharing</span><span class="w-note">✨ နေ့တိုင်း Update</span></div>
+    <div class="w-label" id="wLabel">MOEHTET TECH SHARING</div>
+    <div class="w-big" id="wBig">နည်းပညာ tips နဲ့ app တွေ စုစည်းရာ</div>
+    <div class="w-row"><span class="w-stars" id="wStars">⭐ Premium Sharing</span><span class="w-note" id="wNote">✨ နေ့တိုင်း Update</span></div>
   </div>
   <div class="quick">
-    <button class="qa active" data-f="" onclick="setFilter(this,'')"><span class="qa-ic">🧾</span><span>အားလုံး</span></button>
-    <button class="qa" data-f="App" onclick="setFilter(this,'App')"><span class="qa-ic">⬇️</span><span>Apps</span></button>
-    <button class="qa" data-f="File" onclick="setFilter(this,'File')"><span class="qa-ic">📄</span><span>Files</span></button>
-    <button class="qa" data-f="Video" onclick="setFilter(this,'Video')"><span class="qa-ic">▶️</span><span>Video</span></button>
-    <button class="qa" data-f="ပုံ" onclick="setFilter(this,'ပုံ')"><span class="qa-ic">🖼️</span><span>ပုံများ</span></button>
+    <button class="qa active" data-f="" onclick="setFilter(this,'')"><span class="qa-ic">🧾</span><span id="qaAll">အားလုံး</span></button>
+    <button class="qa" data-f="App" onclick="setFilter(this,'App')"><span class="qa-ic">⬇️</span><span id="qaApps">Apps</span></button>
+    <button class="qa" data-f="File" onclick="setFilter(this,'File')"><span class="qa-ic">📄</span><span id="qaFiles">Files</span></button>
+    <button class="qa" data-f="Video" onclick="setFilter(this,'Video')"><span class="qa-ic">▶️</span><span id="qaVideo">Video</span></button>
+    <button class="qa" data-f="ပုံ" onclick="setFilter(this,'ပုံ')"><span class="qa-ic">🖼️</span><span id="qaImgs">ပုံများ</span></button>
   </div>
 </div>
 <section class="section">
-  <div class="sec-head"><div class="sec-title">⭐ Popular</div><div class="sec-more">Services</div></div>
+  <div class="sec-head"><div class="sec-title" id="popTitle">⭐ Popular</div><div class="sec-more" id="popMore">Services</div></div>
   <div class="pop-sheet"><div class="pop-grid">
-    <a class="tile" href="https://github.com/moehtetdata/moehtet/releases/download/v0.3.3/MoeHtet.apk" target="_blank" rel="noopener"><span class="t-ic">📱</span><span>MoeHtet VPN</span></a>
-    <button class="tile" onclick="jumpFilter(event,'App')"><span class="t-ic">⬇️</span><span>Apps</span></button>
-    <button class="tile" onclick="jumpFilter(event,'File')"><span class="t-ic">📂</span><span>Files</span></button>
-    <button class="tile" onclick="jumpFilter(event,'Video')"><span class="t-ic">▶️</span><span>Video</span></button>
-    <button class="tile" onclick="jumpFilter(event,'ပုံ')"><span class="t-ic">🖼️</span><span>ပုံများ</span></button>
-    <a class="tile" href="#feed" onclick="jumpFilter(event,'')"><span class="t-ic">📰</span><span>နောက်ဆုံး Posts</span></a>
-    <a class="tile" href="#" onclick="openSupport(event)"><span class="t-ic">💬</span><span>Support Chat</span></a>
-    <a class="tile" href="./"><span class="t-ic">🏠</span><span>ပင်မ</span></a>
+    <a class="tile" href="https://github.com/moehtetdata/moehtet/releases/download/v0.3.3/MoeHtet.apk" target="_blank" rel="noopener"><span class="t-ic">📱</span><span id="tVpn">MoeHtet VPN</span></a>
+    <button class="tile" onclick="jumpFilter(event,'App')"><span class="t-ic">⬇️</span><span id="tApps">Apps</span></button>
+    <button class="tile" onclick="jumpFilter(event,'File')"><span class="t-ic">📂</span><span id="tFiles">Files</span></button>
+    <button class="tile" onclick="jumpFilter(event,'Video')"><span class="t-ic">▶️</span><span id="tVideo">Video</span></button>
+    <button class="tile" onclick="jumpFilter(event,'ပုံ')"><span class="t-ic">🖼️</span><span id="tImgs">ပုံများ</span></button>
+    <a class="tile" href="#feed" onclick="jumpFilter(event,'')"><span class="t-ic">📰</span><span id="tPosts">နောက်ဆုံး Posts</span></a>
+    <a class="tile" href="#" onclick="openSupport(event)"><span class="t-ic">💬</span><span id="tSupport">Support Chat</span></a>
+    <a class="tile" href="./"><span class="t-ic">🏠</span><span id="tHome">ပင်မ</span></a>
   </div></div>
-  <a class="promo" href="https://github.com/moehtetdata/moehtet/releases/download/v0.3.3/MoeHtet.apk" target="_blank" rel="noopener"><div><b>📱 MoeHtet VPN — အသစ်</b><small>MASQUE နည်းပညာနဲ့ မြန်ဆန်တဲ့ VPN app</small></div><span class="p-btn">ဒေါင်းလုဒ် ⬇️</span></a>
+  <a class="promo" href="https://github.com/moehtetdata/moehtet/releases/download/v0.3.3/MoeHtet.apk" target="_blank" rel="noopener"><div><b id="promoB">📱 MoeHtet VPN — အသစ်</b><small id="promoS">MASQUE နည်းပညာနဲ့ မြန်ဆန်တဲ့ VPN app</small></div><span class="p-btn" id="promoBtn">ဒေါင်းလုဒ် ⬇️</span></a>
 </section>
 <main id="feed">
-  <div class="state-card"><div class="spinner"></div><div>Post တွေ ယူနေတယ်…</div><small>ခဏစောင့်ပါ</small></div>
+  <div class="state-card"><div class="spinner"></div><div id="loadText">Post တွေ ယူနေတယ်…</div><small id="loadWait">ခဏစောင့်ပါ</small></div>
 </main>
-<footer>© MoeHtet — နည်းပညာ Sharing</footer>
+<footer id="footText">© MoeHtet — နည်းပညာ Sharing</footer>
 <nav class="bottom-nav"><div class="bn-in">
-  <a href="./" class="active"><span>🏠</span>Home</a>
-  <a href="#feed"><span>📰</span>Posts</a>
-  <a class="bn-center" href="https://github.com/moehtetdata/moehtet/releases/download/v0.3.3/MoeHtet.apk" target="_blank" rel="noopener"><span class="fab">⬇️</span>VPN App</a>
-  <a href="#feed" onclick="jumpFilter(event,'File')"><span>📂</span>Files</a>
-  <a href="#" onclick="openSupport(event)"><span>💬</span>Support</a>
+  <a href="./" class="active"><span>🏠</span><span id="nHome">Home</span></a>
+  <a href="#feed"><span>📰</span><span id="nPosts">Posts</span></a>
+  <a class="bn-center" href="https://github.com/moehtetdata/moehtet/releases/download/v0.3.3/MoeHtet.apk" target="_blank" rel="noopener"><span class="fab">⬇️</span><span id="nVpn">VPN App</span></a>
+  <a href="#feed" onclick="jumpFilter(event,'File')"><span>📂</span><span id="nFiles">Files</span></a>
+  <a href="#" onclick="openSupport(event)"><span>💬</span><span id="nSupport">Support</span></a>
 </div></nav>
 <script>
 var API = 'https://script.google.com/macros/s/AKfycbyeXvBLYcbe038_QFTxiwulGH-oVbgsXI5_9VZ025MjfMaVGlRa_2QUX-0T6LTQeaxG8w/exec';
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function btnFor(p){
   if(!p.link) return '';
-  if(p.type.indexOf('File')>-1) return '<a class="btn file" href="'+esc(p.link)+'" target="_blank" rel="noopener">📄 File ဒေါင်းလုဒ်</a>';
-  if(p.type.indexOf('Video')>-1) return '<a class="btn video" href="'+esc(p.link)+'" target="_blank" rel="noopener">▶️ Video ကြည့်ရန်</a>';
-  if(p.type.indexOf('App')>-1) return '<a class="btn" href="'+esc(p.link)+'" target="_blank" rel="noopener">⬇️ App Link</a>';
-  return '<a class="btn" href="'+esc(p.link)+'" target="_blank" rel="noopener">🔗 Link</a>';
+  if(p.type.indexOf('File')>-1) return '<a class="btn file" href="'+esc(p.link)+'" target="_blank" rel="noopener">'+T('btn_file')+'</a>';
+  if(p.type.indexOf('Video')>-1) return '<a class="btn video" href="'+esc(p.link)+'" target="_blank" rel="noopener">'+T('btn_video')+'</a>';
+  if(p.type.indexOf('App')>-1) return '<a class="btn" href="'+esc(p.link)+'" target="_blank" rel="noopener">'+T('btn_app')+'</a>';
+  return '<a class="btn" href="'+esc(p.link)+'" target="_blank" rel="noopener">'+T('btn_link')+'</a>';
 }
 function cardHtml(p){
   var d=p.ts? new Date(p.ts):null;
@@ -244,7 +254,7 @@ function cardHtml(p){
   var img=(p.type.indexOf('ပုံ')>-1 && p.link)? '<img class="img" src="'+esc(p.link)+'" alt="">' : '';
   var vid=(!img && p.type.indexOf('Video')>-1 && p.link && p.link.indexOf('drive.google.com')>-1)? '<div style="position:relative;padding-top:56.25%;margin-top:10px"><iframe src="'+esc(p.link)+'" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:12px" allowfullscreen></iframe></div>' : '';
   var media=img||vid;
-  var share=p.id? '<button class="sharebtn" onclick="copyLink(this,\''+esc(p.id)+'\')">🔗 Link ကူးမယ်</button>' : '';
+  var share=p.id? '<button class="sharebtn" onclick="copyLink(this,\''+esc(p.id)+'\')">'+T('copy')+'</button>' : '';
   return '<article class="card" data-pid="'+esc(p.id||'')+'"><div class="meta-row"><span class="tag">'+esc(p.type)+'</span><div class="meta-right"><span class="views">👁 <b id="vw-'+esc(p.id||'')+'">'+(p.views||0)+'</b></span>'+ds+'</div></div><h2>'+esc(p.title)+'</h2><p>'+esc(p.body)+'</p>'+media+'<div class="actions">'+(media?'':btnFor(p))+share+'</div></article>';
 }
 var allPosts=[];
@@ -260,8 +270,8 @@ function renderFeed(){
     list.push(p);
   }
   var feed=document.getElementById('feed');
-  if(!list.length){ feed.innerHTML='<p>ရှာတာ မတွေ့ဘူး — တခြား စာလုံး စမ်းကြည့်ပါ</p>'; return; }
-  var ttl=(curFilter||curSearch)? '🔎 ရလဒ်များ' : '📰 နောက်ဆုံး Post များ';
+  if(!list.length){ feed.innerHTML='<p>'+T('empty')+'</p>'; return; }
+  var ttl=(curFilter||curSearch)? T('results') : T('latest');
   var h='<div class="sec-title" style="margin-top:20px">'+ttl+'</div>';
   for(var j=0;j<list.length;j++) h+=cardHtml(list[j]);
   feed.innerHTML=h;
@@ -287,18 +297,20 @@ function openSupport(e){
   if(e) e.preventDefault();
   if(window.Tawk_API && Tawk_API.maximize) Tawk_API.maximize();
 }
+var singleId='';
 function start(posts){
   loaded=true;
   allPosts=posts||[];
   if(!posts || !posts.length){
-    document.getElementById('feed').innerHTML='<p style="text-align:center;color:#aaa;padding:36px 0">ခုထိ post မရှိသေးဘူး</p>';
+    document.getElementById('feed').innerHTML='<p>'+T('no_posts')+'</p>';
     return;
   }
   var hsh=location.hash.replace('#','');
   if(hsh){
     for(var i=0;i<posts.length;i++){
       if(posts[i].id===hsh){
-        document.getElementById('feed').innerHTML='<p><a class="allink" href="./">← Post အားလုံး ကြည့်မယ်</a></p>'+cardHtml(posts[i]);
+        singleId=hsh;
+        document.getElementById('feed').innerHTML='<p><a class="allink" href="./">'+T('back')+'</a></p>'+cardHtml(posts[i]);
         armViews();
         return;
       }
@@ -314,21 +326,60 @@ function copyLink(btn,id){
   var ok=false;
   try{ ok=document.execCommand('copy'); }catch(e){}
   document.body.removeChild(ta);
-  function done(){ btn.textContent='✅ ကူးပြီးပြီ'; setTimeout(function(){ btn.textContent='🔗 Link ကူးမယ်'; },2000); }
+  function done(){ btn.textContent=T('copied'); setTimeout(function(){ btn.textContent=T('copy'); },2000); }
   if(ok){ done(); }
   else if(navigator.clipboard){ navigator.clipboard.writeText(url).then(done, function(){ btn.textContent=url; }); }
   else { btn.textContent=url; }
 }
-(function(){
+var I18N={
+  my:{title:'MoeHtet — နည်းပညာ Sharing',greet_m:'မင်္ဂလာနံနက်ခင်းပါ ☀️',greet_a:'မင်္ဂလာနေ့လယ်ခင်းပါ 🌤️',greet_e:'မင်္ဂလာညနေခင်းပါ 🌇',greet_n:'မင်္ဂလာညချမ်းပါ 🌙',search:'Post ရှာရန်…',w_big:'နည်းပညာ tips နဲ့ app တွေ စုစည်းရာ',w_stars:'⭐ Premium Sharing',w_note:'✨ နေ့တိုင်း Update',qa_all:'အားလုံး',qa_apps:'Apps',qa_files:'Files',qa_video:'Video',qa_imgs:'ပုံများ',popular:'⭐ Popular',services:'Services',t_vpn:'MoeHtet VPN',t_apps:'Apps',t_files:'Files',t_video:'Video',t_imgs:'ပုံများ',t_posts:'နောက်ဆုံး Posts',t_support:'Support Chat',t_home:'ပင်မ',promo_b:'📱 MoeHtet VPN — အသစ်',promo_s:'MASQUE နည်းပညာနဲ့ မြန်ဆန်တဲ့ VPN app',promo_btn:'ဒေါင်းလုဒ် ⬇️',latest:'📰 နောက်ဆုံး Post များ',results:'🔎 ရလဒ်များ',empty:'ရှာတာ မတွေ့ဘူး — တခြား စာလုံး စမ်းကြည့်ပါ',no_posts:'ခုထိ post မရှိသေးဘူး',loading:'Post တွေ ယူနေတယ်…',wait:'ခဏစောင့်ပါ',slow:'Connection နှေးနေတယ် — page ကို refresh ပြန်လုပ်ပါ',copy:'🔗 Link ကူးမယ်',copied:'✅ ကူးပြီးပြီ',btn_app:'⬇️ App Link',btn_file:'📄 File ဒေါင်းလုဒ်',btn_video:'▶️ Video ကြည့်ရန်',btn_link:'🔗 Link',back:'← Post အားလုံး ကြည့်မယ်',nav_home:'Home',nav_posts:'Posts',nav_vpn:'VPN App',nav_files:'Files',nav_support:'Support',footer:'© MoeHtet — နည်းပညာ Sharing'},
+  en:{title:'MoeHtet — Tech Sharing',greet_m:'Good Morning ☀️',greet_a:'Good Afternoon 🌤️',greet_e:'Good Evening 🌇',greet_n:'Good Night 🌙',search:'Search posts…',w_big:'Tech tips & apps, all in one place',w_stars:'⭐ Premium Sharing',w_note:'✨ Updated daily',qa_all:'All',qa_apps:'Apps',qa_files:'Files',qa_video:'Video',qa_imgs:'Images',popular:'⭐ Popular',services:'Services',t_vpn:'MoeHtet VPN',t_apps:'Apps',t_files:'Files',t_video:'Video',t_imgs:'Images',t_posts:'Latest Posts',t_support:'Support Chat',t_home:'Home',promo_b:'📱 MoeHtet VPN — New',promo_s:'Fast VPN app with MASQUE technology',promo_btn:'Download ⬇️',latest:'📰 Latest Posts',results:'🔎 Results',empty:'Nothing found — try another keyword',no_posts:'No posts yet',loading:'Loading posts…',wait:'Please wait',slow:'Connection is slow — please refresh the page',copy:'🔗 Copy Link',copied:'✅ Copied',btn_app:'⬇️ App Link',btn_file:'📄 Download File',btn_video:'▶️ Watch Video',btn_link:'🔗 Open Link',back:'← View all posts',nav_home:'Home',nav_posts:'Posts',nav_vpn:'VPN App',nav_files:'Files',nav_support:'Support',footer:'© MoeHtet — Tech Sharing'}
+};
+var LANG='my';
+try{ LANG=localStorage.getItem('mh_lang')||'my'; }catch(e){}
+if(LANG!=='en') LANG='my';
+function T(k){ return (I18N[LANG]&&I18N[LANG][k])||I18N.my[k]||k; }
+function setGreeting(){
   var gel=document.getElementById('greetText');
-  if(gel){
-    var h=new Date().getHours();
-    gel.textContent = (h>=5 && h<12) ? 'မင်္ဂလာနံနက်ခင်းပါ ☀️'
-      : (h>=12 && h<16) ? 'မင်္ဂလာနေ့လယ်ခင်းပါ 🌤️'
-      : (h>=16 && h<19) ? 'မင်္ဂလာညနေခင်းပါ 🌇'
-      : 'မင်္ဂလာညချမ်းပါ 🌙';
+  if(!gel) return;
+  var h=new Date().getHours();
+  gel.textContent=(h>=5&&h<12)?T('greet_m'):(h>=12&&h<16)?T('greet_a'):(h>=16&&h<19)?T('greet_e'):T('greet_n');
+}
+function setText(id,txt){ var el=document.getElementById(id); if(el) el.textContent=txt; }
+function applyLang(){
+  document.documentElement.lang=(LANG==='en'?'en':'my');
+  document.title=T('title');
+  setGreeting();
+  var si=document.getElementById('search'); if(si) si.placeholder=T('search');
+  setText('wBig',T('w_big')); setText('wStars',T('w_stars')); setText('wNote',T('w_note'));
+  setText('qaAll',T('qa_all')); setText('qaApps',T('qa_apps')); setText('qaFiles',T('qa_files')); setText('qaVideo',T('qa_video')); setText('qaImgs',T('qa_imgs'));
+  setText('popTitle',T('popular')); setText('popMore',T('services'));
+  setText('tVpn',T('t_vpn')); setText('tApps',T('t_apps')); setText('tFiles',T('t_files')); setText('tVideo',T('t_video')); setText('tImgs',T('t_imgs')); setText('tPosts',T('t_posts')); setText('tSupport',T('t_support')); setText('tHome',T('t_home'));
+  setText('promoB',T('promo_b')); setText('promoS',T('promo_s')); setText('promoBtn',T('promo_btn'));
+  setText('loadText',T('loading')); setText('loadWait',T('wait'));
+  setText('footText',T('footer'));
+  setText('nHome',T('nav_home')); setText('nPosts',T('nav_posts')); setText('nVpn',T('nav_vpn')); setText('nFiles',T('nav_files')); setText('nSupport',T('nav_support'));
+  var bm=document.getElementById('langMy'), be=document.getElementById('langEn');
+  if(bm) bm.className=(LANG==='my'?'on':'');
+  if(be) be.className=(LANG==='en'?'on':'');
+}
+function setLang(l){
+  LANG=(l==='en'?'en':'my');
+  try{ localStorage.setItem('mh_lang',LANG); }catch(e){}
+  applyLang();
+  if(!loaded) return;
+  if(singleId){
+    for(var i=0;i<allPosts.length;i++){
+      if(allPosts[i].id===singleId){
+        document.getElementById('feed').innerHTML='<p><a class="allink" href="./">'+T('back')+'</a></p>'+cardHtml(allPosts[i]);
+        armViews();
+        return;
+      }
+    }
   }
-})();
+  renderFeed();
+}
+applyLang();
 (function(){
   var pts=1;
   try{ pts=(parseInt(localStorage.getItem('mh_points')||'0',10)||0)+1; localStorage.setItem('mh_points',String(pts)); }catch(e){}
@@ -369,7 +420,7 @@ window[cb]=function(res){ if(res && res.ok) start(res.posts); };
 setTimeout(function(){
   if(!loaded){
     var f=document.getElementById('feed');
-    if(f) f.innerHTML='<p style="text-align:center;color:#aaa;padding:36px 0">Connection နှေးနေတယ် — page ကို refresh ပြန်လုပ်ပါ</p>';
+    if(f) f.innerHTML='<p>'+T('slow')+'</p>';
   }
 }, 20000);
 var s=document.createElement('script');
