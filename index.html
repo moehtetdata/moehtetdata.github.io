@@ -30,7 +30,6 @@
     padding:8px 12px; border-radius:999px; font-size:12.5px; font-weight:800; color:#9a6a00;
     background:#fff3d6; border:1px solid #ffe1a1;
   }
-  .top-right{display:flex; flex-direction:column; align-items:flex-end; gap:8px}
   .lang-wrap{position:relative}
   .lang-btn{
     width:40px; height:40px; border-radius:50%; border:1px solid var(--line); background:#fff;
@@ -208,13 +207,13 @@
 <div class="wrap">
   <div class="greet-row">
     <div class="greet-left"><div class="avatar">M</div><div><div class="greet" id="greetText">မင်္ဂလာပါ 👋</div><div class="gname">MoeHtet Tech Sharing</div></div></div>
-    <div class="top-right"><div class="lang-wrap"><button class="lang-btn" id="langBtn" onclick="toggleLangMenu(event)" aria-label="Language">🌐</button><div class="lang-menu" id="langMenu"><button onclick="setLang('my')">🇲🇲 မြန်မာ<span class="tick" id="tickMy">✓</span></button><button onclick="setLang('en')">🇬🇧 English<span class="tick" id="tickEn">✓</span></button></div></div><div class="star-pill" id="pointsPill">💎 0P</div></div>
+    <div class="lang-wrap"><button class="lang-btn" id="langBtn" onclick="toggleLangMenu(event)" aria-label="Language">🌐</button><div class="lang-menu" id="langMenu"><button onclick="setLang('my')">🇲🇲 မြန်မာ<span class="tick" id="tickMy">✓</span></button><button onclick="setLang('en')">🇬🇧 English<span class="tick" id="tickEn">✓</span></button></div></div>
   </div>
   <div class="searchbar"><span>🔍</span><input id="search" type="search" placeholder="Post ရှာရန်…" oninput="onSearch(this)"></div>
   <div class="balance-card">
     <div class="w-label" id="wLabel">MOEHTET TECH SHARING</div>
     <div class="w-big" id="wBig">နည်းပညာ tips နဲ့ app တွေ စုစည်းရာ</div>
-    <div class="w-row"><span class="w-stars" id="wStars">⭐ Premium Sharing</span><span class="w-note" id="wNote">✨ နေ့တိုင်း Update</span></div>
+    <div class="w-row"><span class="w-stars" id="wStars">⭐ Premium Sharing</span><span class="star-pill" id="pointsPill">💎 0P</span></div>
   </div>
   <div class="quick">
     <button class="qa active" data-f="" onclick="setFilter(this,'')"><span class="qa-ic">🧾</span><span id="qaAll">အားလုံး</span></button>
@@ -362,7 +361,7 @@ function applyLang(){
   document.title=T('title');
   setGreeting();
   var si=document.getElementById('search'); if(si) si.placeholder=T('search');
-  setText('wBig',T('w_big')); setText('wStars',T('w_stars')); setText('wNote',T('w_note'));
+  setText('wBig',T('w_big')); setText('wStars',T('w_stars'));
   setText('qaAll',T('qa_all')); setText('qaApps',T('qa_apps')); setText('qaFiles',T('qa_files')); setText('qaVideo',T('qa_video')); setText('qaImgs',T('qa_imgs'));
   setText('popTitle',T('popular')); setText('popMore',T('services'));
   setText('tVpn',T('t_vpn')); setText('tApps',T('t_apps')); setText('tFiles',T('t_files')); setText('tVideo',T('t_video')); setText('tImgs',T('t_imgs')); setText('tPosts',T('t_posts')); setText('tSupport',T('t_support')); setText('tHome',T('t_home'));
