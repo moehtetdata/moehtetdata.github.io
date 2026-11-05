@@ -197,7 +197,7 @@
 <div class="wrap">
   <div class="greet-row">
     <div class="greet-left"><div class="avatar">M</div><div><div class="greet" id="greetText">မင်္ဂလာပါ 👋</div><div class="gname">MoeHtet Tech Sharing</div></div></div>
-    <div class="top-right"><div class="lang-switch"><button id="langMy" onclick="setLang('my')">မြန်မာ</button><button id="langEn" onclick="setLang('en')">EN</button></div><div class="star-pill" id="pointsPill">⭐ 0P</div></div>
+    <div class="top-right"><div class="lang-switch"><button id="langMy" onclick="setLang('my')">မြန်မာ</button><button id="langEn" onclick="setLang('en')">EN</button></div><div class="star-pill" id="pointsPill">💎 0P</div></div>
   </div>
   <div class="searchbar"><span>🔍</span><input id="search" type="search" placeholder="Post ရှာရန်…" oninput="onSearch(this)"></div>
   <div class="balance-card">
@@ -384,7 +384,7 @@ applyLang();
   var pts=1;
   try{ pts=(parseInt(localStorage.getItem('mh_points')||'0',10)||0)+1; localStorage.setItem('mh_points',String(pts)); }catch(e){}
   var el=document.getElementById('pointsPill');
-  if(el) el.textContent='⭐ '+pts+'P';
+  if(el) el.textContent='💎 '+pts+'P';
 })();
 window.mhnoop=function(){};
 var viewObs=null;
