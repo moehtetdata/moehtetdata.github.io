@@ -7,74 +7,105 @@
 <style>
   :root{
     --blue:#0057d9; --blue2:#0090ff; --ink:#13233d; --muted:#68798f; --soft:#93a5bb;
-    --line:#e2eaf3; --bg:#eef3fa; --gold:#f5a623;
+    --line:#e4ecf5; --bg:#f2f6fc; --gold:#f5a623;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{
-    margin:0; min-height:100vh; color:var(--ink); padding-bottom:86px;
+    margin:0; min-height:100vh; color:var(--ink); padding-bottom:92px;
     font-family:Inter,ui-rounded,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    background:linear-gradient(180deg,#eaf2fd 0%,#eef3fa 220px,#eef3fa 100%);
+    background:linear-gradient(180deg,#e8f1fd 0%,var(--bg) 300px,var(--bg) 100%);
   }
-  .wrap{max-width:760px; margin:0 auto}
-  .app-header{
-    color:#fff; padding:24px 16px 22px;
-    background:linear-gradient(155deg,#0052cc 0%,#0070f3 48%,#00a3ff 100%);
-    border-radius:0 0 30px 30px;
-    box-shadow:0 18px 40px rgba(0,87,217,.28);
-  }
+  .wrap{max-width:760px; margin:0 auto; padding:20px 16px 0}
   .greet-row{display:flex; align-items:center; justify-content:space-between; gap:12px}
   .greet-left{display:flex; align-items:center; gap:12px}
   .avatar{
-    width:47px; height:47px; border-radius:50%; display:grid; place-items:center;
-    background:rgba(255,255,255,.20); border:1.5px solid rgba(255,255,255,.55);
-    font-size:21px; font-weight:900;
+    width:47px; height:47px; border-radius:50%; display:grid; place-items:center; color:#fff;
+    background:linear-gradient(140deg,var(--blue),var(--blue2));
+    font-size:21px; font-weight:900; box-shadow:0 10px 22px rgba(0,87,217,.30);
   }
-  .greet{font-size:13px; opacity:.88}
-  .gname{font-size:19px; font-weight:850; letter-spacing:-.01em; margin-top:2px}
+  .greet{font-size:13px; color:var(--muted)}
+  .gname{font-size:19px; font-weight:850; letter-spacing:-.01em; margin-top:2px; color:var(--ink)}
   .star-pill{
-    padding:8px 12px; border-radius:999px; font-size:12.5px; font-weight:800;
-    background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.35);
+    padding:8px 12px; border-radius:999px; font-size:12.5px; font-weight:800; color:#9a6a00;
+    background:#fff3d6; border:1px solid #ffe1a1;
   }
-  .wallet-card{
-    margin-top:19px; padding:17px; border-radius:23px;
-    background:linear-gradient(140deg,rgba(255,255,255,.24),rgba(255,255,255,.10));
-    border:1px solid rgba(255,255,255,.38);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.35);
-    backdrop-filter:blur(10px);
+  .searchbar{
+    margin-top:16px; display:flex; align-items:center; gap:9px;
+    background:#fff; border:1px solid var(--line); border-radius:999px; padding:0 16px;
+    box-shadow:0 8px 20px rgba(19,35,61,.05);
+  }
+  .searchbar span{font-size:16px; opacity:.65}
+  .searchbar input{
+    flex:1; border:0; outline:none; background:none; padding:13px 0;
+    font-size:15px; color:var(--ink); font-family:inherit;
+  }
+  .balance-card{
+    margin-top:16px; padding:19px; border-radius:26px; color:#fff; position:relative; overflow:hidden;
+    background:linear-gradient(140deg,#0052cc 0%,#0070f3 52%,#00a3ff 100%);
+    box-shadow:0 20px 42px rgba(0,87,217,.30);
+  }
+  .balance-card::after{
+    content:""; position:absolute; right:-46px; top:-46px; width:170px; height:170px; border-radius:50%;
+    background:rgba(255,255,255,.14);
   }
   .w-label{font-size:11px; font-weight:800; letter-spacing:.20em; opacity:.85}
-  .w-big{font-size:20px; font-weight:850; margin-top:8px; line-height:1.45}
-  .w-chips{display:flex; flex-wrap:wrap; gap:8px; margin-top:13px}
-  .w-chips span{padding:6px 11px; border-radius:999px; background:rgba(255,255,255,.20); font-size:12.5px; font-weight:600}
+  .w-big{font-size:23px; font-weight:900; margin-top:9px; line-height:1.4; position:relative; z-index:1}
+  .w-row{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:15px; position:relative; z-index:1}
+  .w-stars{padding:7px 12px; border-radius:999px; background:rgba(255,255,255,.20); border:1px solid rgba(255,255,255,.35); font-size:13px; font-weight:750}
+  .w-note{font-size:12.5px; opacity:.9}
   .quick{display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-top:20px}
   .qa{
-    background:none; border:0; cursor:pointer; color:#fff; padding:0;
-    display:flex; flex-direction:column; align-items:center; gap:7px;
-    font-size:12px; font-weight:600; font-family:inherit;
+    background:none; border:0; cursor:pointer; color:var(--ink); padding:0;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    font-size:12.5px; font-weight:650; font-family:inherit;
   }
   .qa-ic{
-    width:52px; height:52px; border-radius:50%; display:grid; place-items:center;
-    background:#fff; font-size:22px; box-shadow:0 8px 18px rgba(0,40,100,.22);
+    width:54px; height:54px; border-radius:50%; display:grid; place-items:center;
+    background:#fff; font-size:23px; border:1px solid var(--line);
+    box-shadow:0 8px 18px rgba(19,35,61,.07);
     transition:transform .15s, box-shadow .15s;
   }
-  .qa.active .qa-ic{box-shadow:0 0 0 3px var(--gold),0 10px 20px rgba(0,40,100,.28); transform:translateY(-2px)}
-  .qa.active{font-weight:850}
-  .popular{max-width:760px; margin:0 auto; padding:20px 16px 0}
-  .sec-title{font-size:17px; font-weight:850; color:var(--ink); margin:4px 2px 12px}
-  .pop-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:11px}
-  .tile{
-    background:#fff; border:1px solid var(--line); border-radius:20px; padding:15px 6px 13px;
-    text-align:center; text-decoration:none; color:var(--ink);
-    box-shadow:0 8px 22px rgba(19,35,61,.06);
-    display:flex; flex-direction:column; align-items:center; gap:8px;
-    font-size:12.5px; font-weight:650; line-height:1.35;
+  .qa.active{color:var(--blue); font-weight:850}
+  .qa.active .qa-ic{box-shadow:0 0 0 3px var(--blue),0 10px 20px rgba(0,87,217,.20); transform:translateY(-2px)}
+  .section{max-width:760px; margin:0 auto; padding:20px 16px 0}
+  .sec-head{display:flex; align-items:baseline; justify-content:space-between; margin:2px 2px 12px}
+  .sec-title{font-size:17.5px; font-weight:850; color:var(--ink)}
+  .sec-more{font-size:13px; color:var(--blue); font-weight:700}
+  .pop-sheet{
+    background:#fff; border:1px solid var(--line); border-radius:26px; padding:18px 12px 8px;
+    box-shadow:0 10px 26px rgba(19,35,61,.06);
   }
-  .t-ic{font-size:26px}
-  main{max-width:760px; margin:0 auto; padding:8px 16px 26px}
+  .pop-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:4px}
+  .tile{
+    background:none; border:0; cursor:pointer; text-decoration:none; color:var(--ink); font-family:inherit;
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    padding:10px 2px 12px; font-size:12.5px; font-weight:650; line-height:1.35; text-align:center;
+  }
+  .t-ic{
+    width:50px; height:50px; border-radius:17px; display:grid; place-items:center; font-size:24px;
+    background:#e7f0ff;
+  }
+  .tile:nth-child(2) .t-ic{background:#e6f7ee} .tile:nth-child(3) .t-ic{background:#fff3d6}
+  .tile:nth-child(4) .t-ic{background:#f3e8ff} .tile:nth-child(5) .t-ic{background:#ffe9f0}
+  .tile:nth-child(6) .t-ic{background:#e0f7fa} .tile:nth-child(7) .t-ic{background:#e9f7ef}
+  .tile:nth-child(8) .t-ic{background:#eef1f6}
+  .promo{
+    margin-top:16px; border-radius:24px; padding:17px 18px; color:#fff;
+    background:linear-gradient(120deg,#0070f3,#00a3ff);
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    box-shadow:0 16px 34px rgba(0,87,217,.24); text-decoration:none;
+  }
+  .promo b{font-size:16.5px; display:block}
+  .promo small{opacity:.88; font-size:12.5px}
+  .promo .p-btn{
+    flex:0 0 auto; background:#fff; color:var(--blue); font-weight:850; font-size:13.5px;
+    padding:10px 15px; border-radius:999px;
+  }
+  main{max-width:760px; margin:0 auto; padding:6px 16px 26px}
   .card{
-    background:#fff; margin-top:14px; padding:20px; border-radius:24px;
-    border:1px solid var(--line); box-shadow:0 10px 28px rgba(19,35,61,.07);
+    background:#fff; margin-top:13px; padding:20px; border-radius:24px;
+    border:1px solid var(--line); box-shadow:0 8px 24px rgba(19,35,61,.06);
   }
   .meta-row{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:11px}
   .tag{
@@ -100,9 +131,9 @@
   }
   .allink{color:var(--blue); font-size:15px; font-weight:750; text-decoration:none}
   .state-card{
-    margin-top:16px; padding:32px 20px; text-align:center; color:var(--ink);
+    margin-top:14px; padding:32px 20px; text-align:center; color:var(--ink);
     border-radius:24px; border:1px solid var(--line); background:#fff;
-    box-shadow:0 10px 28px rgba(19,35,61,.07);
+    box-shadow:0 8px 24px rgba(19,35,61,.06);
   }
   .state-card small{display:block; margin-top:7px; color:var(--muted)}
   .spinner{
@@ -112,17 +143,17 @@
   }
   @keyframes spin{to{transform:rotate(360deg)}}
   #feed > p{
-    margin-top:16px; padding:28px 20px !important; text-align:center;
+    margin-top:14px; padding:28px 20px !important; text-align:center;
     border-radius:24px; border:1px solid var(--line); background:#fff;
-    color:var(--muted) !important; box-shadow:0 10px 28px rgba(19,35,61,.07);
+    color:var(--muted) !important; box-shadow:0 8px 24px rgba(19,35,61,.06);
   }
-  footer{text-align:center; color:var(--soft); font-size:13px; padding:6px 20px 14px}
+  footer{text-align:center; color:var(--soft); font-size:13px; padding:8px 20px 14px}
   .bottom-nav{
     position:fixed; left:0; right:0; bottom:0; z-index:50;
-    background:rgba(255,255,255,.94); backdrop-filter:blur(14px);
-    border-top:1px solid var(--line); box-shadow:0 -8px 24px rgba(19,35,61,.06);
+    background:rgba(255,255,255,.96); backdrop-filter:blur(14px);
+    border-top:1px solid var(--line); box-shadow:0 -8px 24px rgba(19,35,61,.07);
   }
-  .bn-in{max-width:760px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr)}
+  .bn-in{max-width:760px; margin:0 auto; display:grid; grid-template-columns:repeat(5,1fr); align-items:end}
   .bn-in a{
     display:flex; flex-direction:column; align-items:center; gap:2px;
     padding:9px 0 11px; text-decoration:none; color:var(--muted);
@@ -130,44 +161,58 @@
   }
   .bn-in a span{font-size:21px}
   .bn-in a.active{color:var(--blue); font-weight:850}
+  .bn-center{padding:0 0 11px !important}
+  .bn-center .fab{
+    width:56px; height:56px; margin-top:-22px; border-radius:19px;
+    background:linear-gradient(140deg,var(--blue),var(--blue2));
+    display:grid; place-items:center; font-size:26px; color:#fff;
+    box-shadow:0 14px 28px rgba(0,87,217,.38); border:3.5px solid #fff;
+  }
+  .bn-center{color:var(--blue) !important; font-weight:850 !important}
   @media (max-width:600px){
-    .qa-ic{width:47px;height:47px;font-size:20px}
+    .qa-ic{width:49px;height:49px;font-size:21px}
     .gname{font-size:17.5px}
-    .w-big{font-size:18.5px}
+    .w-big{font-size:21px}
     .card{padding:18px}
-    .pop-grid{gap:9px}
-    .tile{font-size:11.5px; padding:13px 4px 11px}
-    .t-ic{font-size:23px}
+    .t-ic{width:46px;height:46px;font-size:22px}
+    .tile{font-size:11.5px}
+    .promo b{font-size:15px}
   }
 </style>
 </head>
 <body>
-<header class="app-header"><div class="wrap">
+<div class="wrap">
   <div class="greet-row">
     <div class="greet-left"><div class="avatar">M</div><div><div class="greet">မင်္ဂလာပါ 👋</div><div class="gname">MoeHtet Tech Sharing</div></div></div>
     <div class="star-pill">⭐ Premium</div>
   </div>
-  <div class="wallet-card">
-    <div class="w-label">TECH SHARING WALLET</div>
+  <div class="searchbar"><span>🔍</span><input id="search" type="search" placeholder="Post ရှာရန်…" oninput="onSearch(this)"></div>
+  <div class="balance-card">
+    <div class="w-label">MOEHTET TECH SHARING</div>
     <div class="w-big">နည်းပညာ tips နဲ့ app တွေ စုစည်းရာ</div>
-    <div class="w-chips"><span>⚡ မြန်ဆန်</span><span>📱 Mobile First</span><span>✨ နေ့တိုင်း Update</span></div>
+    <div class="w-row"><span class="w-stars">⭐ Premium Sharing</span><span class="w-note">✨ နေ့တိုင်း Update</span></div>
   </div>
   <div class="quick">
-    <button class="qa active" onclick="setFilter(this,'')"><span class="qa-ic">🧾</span><span>အားလုံး</span></button>
-    <button class="qa" onclick="setFilter(this,'App')"><span class="qa-ic">⬇️</span><span>Apps</span></button>
-    <button class="qa" onclick="setFilter(this,'File')"><span class="qa-ic">📄</span><span>Files</span></button>
-    <button class="qa" onclick="setFilter(this,'Video')"><span class="qa-ic">▶️</span><span>Video</span></button>
-    <button class="qa" onclick="setFilter(this,'ပုံ')"><span class="qa-ic">🖼️</span><span>ပုံများ</span></button>
+    <button class="qa active" data-f="" onclick="setFilter(this,'')"><span class="qa-ic">🧾</span><span>အားလုံး</span></button>
+    <button class="qa" data-f="App" onclick="setFilter(this,'App')"><span class="qa-ic">⬇️</span><span>Apps</span></button>
+    <button class="qa" data-f="File" onclick="setFilter(this,'File')"><span class="qa-ic">📄</span><span>Files</span></button>
+    <button class="qa" data-f="Video" onclick="setFilter(this,'Video')"><span class="qa-ic">▶️</span><span>Video</span></button>
+    <button class="qa" data-f="ပုံ" onclick="setFilter(this,'ပုံ')"><span class="qa-ic">🖼️</span><span>ပုံများ</span></button>
   </div>
-</div></header>
-<section class="popular">
-  <div class="sec-title">⭐ Popular</div>
-  <div class="pop-grid">
+</div>
+<section class="section">
+  <div class="sec-head"><div class="sec-title">⭐ Popular</div><div class="sec-more">Services</div></div>
+  <div class="pop-sheet"><div class="pop-grid">
     <a class="tile" href="https://github.com/moehtetdata/moehtet/releases/download/v0.3.3/MoeHtet.apk" target="_blank" rel="noopener"><span class="t-ic">📱</span><span>MoeHtet VPN</span></a>
-    <a class="tile" href="https://moehtet.pages.dev" target="_blank" rel="noopener"><span class="t-ic">🛒</span><span>MoeHtet Shop</span></a>
-    <a class="tile" href="#feed"><span class="t-ic">📰</span><span>နောက်ဆုံး Posts</span></a>
+    <button class="tile" onclick="jumpFilter(event,'App')"><span class="t-ic">⬇️</span><span>Apps</span></button>
+    <button class="tile" onclick="jumpFilter(event,'File')"><span class="t-ic">📂</span><span>Files</span></button>
+    <button class="tile" onclick="jumpFilter(event,'Video')"><span class="t-ic">▶️</span><span>Video</span></button>
+    <button class="tile" onclick="jumpFilter(event,'ပုံ')"><span class="t-ic">🖼️</span><span>ပုံများ</span></button>
+    <a class="tile" href="#feed" onclick="jumpFilter(event,'')"><span class="t-ic">📰</span><span>နောက်ဆုံး Posts</span></a>
     <a class="tile" href="#" onclick="openSupport(event)"><span class="t-ic">💬</span><span>Support Chat</span></a>
-  </div>
+    <a class="tile" href="./"><span class="t-ic">🏠</span><span>ပင်မ</span></a>
+  </div></div>
+  <a class="promo" href="https://github.com/moehtetdata/moehtet/releases/download/v0.3.3/MoeHtet.apk" target="_blank" rel="noopener"><div><b>📱 MoeHtet VPN — အသစ်</b><small>MASQUE နည်းပညာနဲ့ မြန်ဆန်တဲ့ VPN app</small></div><span class="p-btn">ဒေါင်းလုဒ် ⬇️</span></a>
 </section>
 <main id="feed">
   <div class="state-card"><div class="spinner"></div><div>Post တွေ ယူနေတယ်…</div><small>ခဏစောင့်ပါ</small></div>
@@ -176,8 +221,9 @@
 <nav class="bottom-nav"><div class="bn-in">
   <a href="./" class="active"><span>🏠</span>Home</a>
   <a href="#feed"><span>📰</span>Posts</a>
-  <a href="https://moehtet.pages.dev" target="_blank" rel="noopener"><span>🛒</span>Shop</a>
-  <a href="https://github.com/moehtetdata/moehtet/releases/download/v0.3.3/MoeHtet.apk" target="_blank" rel="noopener"><span>⬇️</span>VPN App</a>
+  <a class="bn-center" href="https://github.com/moehtetdata/moehtet/releases/download/v0.3.3/MoeHtet.apk" target="_blank" rel="noopener"><span class="fab">⬇️</span>VPN App</a>
+  <a href="#feed" onclick="jumpFilter(event,'File')"><span>📂</span>Files</a>
+  <a href="#" onclick="openSupport(event)"><span>💬</span>Support</a>
 </div></nav>
 <script>
 var API = 'https://script.google.com/macros/s/AKfycbyeXvBLYcbe038_QFTxiwulGH-oVbgsXI5_9VZ025MjfMaVGlRa_2QUX-0T6LTQeaxG8w/exec';
@@ -200,22 +246,38 @@ function cardHtml(p){
 }
 var allPosts=[];
 var curFilter='';
+var curSearch='';
 function render(posts){ renderFeed(); }
 function renderFeed(){
   var list=[];
-  for(var i=0;i<allPosts.length;i++){ if(!curFilter || allPosts[i].type.indexOf(curFilter)>-1) list.push(allPosts[i]); }
+  for(var i=0;i<allPosts.length;i++){
+    var p=allPosts[i];
+    if(curFilter && p.type.indexOf(curFilter)<=-1) continue;
+    if(curSearch && (String(p.title||'')+' '+String(p.body||'')).toLowerCase().indexOf(curSearch)<=-1) continue;
+    list.push(p);
+  }
   var feed=document.getElementById('feed');
-  if(!list.length){ feed.innerHTML='<p>ဒီ အမျိုးအစားမှာ post မရှိသေးဘူး</p>'; return; }
-  var h='<div class="sec-title" style="margin-top:20px">📰 နောက်ဆုံး Post များ</div>';
+  if(!list.length){ feed.innerHTML='<p>ရှာတာ မတွေ့ဘူး — တခြား စာလုံး စမ်းကြည့်ပါ</p>'; return; }
+  var ttl=(curFilter||curSearch)? '🔎 ရလဒ်များ' : '📰 နောက်ဆုံး Post များ';
+  var h='<div class="sec-title" style="margin-top:20px">'+ttl+'</div>';
   for(var j=0;j<list.length;j++) h+=cardHtml(list[j]);
   feed.innerHTML=h;
 }
 function setFilter(btn,f){
   curFilter=f;
   var btns=document.querySelectorAll('.qa');
-  for(var i=0;i<btns.length;i++) btns[i].classList.remove('active');
-  if(btn) btn.classList.add('active');
+  for(var i=0;i<btns.length;i++) btns[i].classList.toggle('active', btns[i].getAttribute('data-f')===f);
   if(allPosts.length) renderFeed();
+}
+function onSearch(el){
+  curSearch=el.value.trim().toLowerCase();
+  if(allPosts.length) renderFeed();
+}
+function jumpFilter(e,f){
+  if(e) e.preventDefault();
+  setFilter(null,f);
+  var feed=document.getElementById('feed');
+  if(feed) feed.scrollIntoView({behavior:'smooth'});
 }
 function openSupport(e){
   if(e) e.preventDefault();
