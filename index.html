@@ -20,11 +20,11 @@
   .greet-row{display:flex; align-items:center; justify-content:space-between; gap:12px}
   .greet-left{display:flex; align-items:center; gap:12px}
   .avatar{
-    width:47px; height:47px; border-radius:50%; display:grid; place-items:center; color:#fff;
+    width:47px; height:47px; border-radius:50%; display:grid; place-items:center; color:#fff; position:relative;
     background:linear-gradient(140deg,var(--blue),var(--blue2));
     font-size:21px; font-weight:900; box-shadow:0 10px 22px rgba(0,87,217,.30);
   }
-  .greet{font-size:13px; color:var(--muted)}
+  .avatar-check{position:absolute; right:-3px; bottom:-3px; width:18px; height:18px; border-radius:50%; background:#f5a623; border:2px solid #fff; display:grid; place-items:center; color:#fff; font-size:11px; font-weight:900; line-height:1; box-shadow:0 2px 6px rgba(245,166,35,.45);} .greet{font-size:13px; color:var(--muted)}
   .gname{font-size:19px; font-weight:850; letter-spacing:-.01em; margin-top:2px; color:var(--ink)}
   .star-pill{
     padding:8px 12px; border-radius:999px; font-size:12.5px; font-weight:800; color:#9a6a00;
@@ -222,7 +222,7 @@
 <body>
 <div class="wrap">
   <div class="greet-row">
-    <div class="greet-left"><div class="avatar">M</div><div><div class="greet" id="greetText">မင်္ဂလာပါ 👋</div><div class="gname">MoeHtet Tech Sharing</div></div></div>
+    <div class="greet-left"><div class="avatar">M<span class="avatar-check">✓</span></div><div><div class="greet" id="greetText">မင်္ဂလာပါ 👋</div><div class="gname">MoeHtet Tech Sharing</div></div></div>
     <div class="lang-wrap"><button class="lang-btn" id="langBtn" onclick="toggleLangMenu(event)" aria-label="Language">🌐</button><div class="lang-menu" id="langMenu"><button onclick="setLang('my')">🇲🇲 မြန်မာ<span class="tick" id="tickMy">✓</span></button><button onclick="setLang('en')">🇬🇧 English<span class="tick" id="tickEn">✓</span></button></div></div>
   </div>
   <div class="searchbar"><span>🔍</span><input id="search" type="search" placeholder="Post ရှာရန်…" oninput="onSearch(this)"></div>
