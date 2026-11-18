@@ -279,9 +279,9 @@ function cardHtml(p){
   var ds=d? ('<div class="date">'+d.toLocaleDateString('en-GB')+'</div>') : '';
   var img=(p.type.indexOf('ပုံ')>-1 && p.link)? '<img class="img" src="'+esc(p.link)+'" alt="">' : '';
   var vid=(!img && p.type.indexOf('Video')>-1 && p.link && p.link.indexOf('drive.google.com')>-1)? '<div style="position:relative;padding-top:56.25%;margin-top:10px"><iframe src="'+esc(p.link)+'" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:12px" allowfullscreen></iframe></div>' : '';
-  var media=img||vid; var vip=isVip(p); var unlocked=!vip||isUnlocked(p.id); var title=cleanTitle(p.title); var bodyHtml=unlocked?linkify(p.body):'🔒 VIP post - unlock to see the download'; if(!unlocked) media='';
-  var share=p.id? '<button class="sharebtn" onclick="copyLink(this,\''+esc(p.id)+'\')">'+T('copy')+'</button>' : '';
-  return '<article class="card" data-pid="'+esc(p.id||'')+'"><div class="meta-row"><span class="tag">'+esc(p.type)+'</span>'+(vip?'<span class="vip-badge">👑 VIP</span>':'')<div class="meta-right"><span class="views">👁 <b id="vw-'+esc(p.id||'')+'">'+(p.views||0)+'</b></span>'+ds+'</div></div><h2>'+esc(title)+'</h2><p>'+bodyHtml+'</p>'+media+'<div class="actions">'+(media?'':btnFor(p))+share+'</div>'+'</article>';
+  var media=img||vid; var vip=isVip(p); var unlocked=!vip||isUnlocked(p.id); var title=cleanTitle(p.title); var badge=vip?'<span class="vip-badge">👑 VIP</span>':''; var bodyHtml=unlocked?linkify(p.body):'🔒 VIP post - unlock to see the download'; if(!unlocked) media='';
+  var share=p.id? '<button class="sharebtn" onclick="copyLink(this,\''+esc(p.id)+'\')">'+T('copy')+'</button>' : ''; var acts=unlocked?'<div class="actions">'+(media?'':btnFor(p))+share+'</div>':'<div class="locked"><b>🔒 VIP — Unlock for 10P (you have '+getPoints()+'P)</b><button class="btn" data-pid="'+esc(p.id)+'" onclick="unlockPost(this.dataset.pid,this)">🔓 Unlock for 10P</button></div><div class="actions">'+share+'</div>';
+  return '<article class="card" data-pid="'+esc(p.id||'')+'"><div class="meta-row"><span class="tag">'+esc(p.type)+'</span>'+badge<div class="meta-right"><span class="views">👁 <b id="vw-'+esc(p.id||'')+'">'+(p.views||0)+'</b></span>'+ds+'</div></div><h2>'+esc(title)+'</h2><p>'+bodyHtml+'</p>'+media+acts+'</article>';
 }
 var allPosts=[];
 var curFilter='';
