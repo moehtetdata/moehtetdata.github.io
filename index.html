@@ -153,7 +153,7 @@
   .views{color:var(--soft); font-size:12px; font-weight:650}
   .views b{color:var(--muted)}
   .card h2{margin:0; font-size:21px; line-height:1.4; letter-spacing:-.01em; color:var(--ink)}
-  .card p{color:#46566e; line-height:1.85; margin:10px 0 0; white-space:pre-wrap; word-break:break-word; font-size:15.5px} .card p a,.post-link{color:#0057d9; font-weight:800; text-decoration:underline; text-underline-offset:2px; opacity:1; filter:none; overflow-wrap:anywhere;}
+  .card p{color:#46566e; line-height:1.85; margin:10px 0 0; white-space:pre-wrap; word-break:break-word; font-size:15.5px} .card p a,.post-link{color:#0057d9; font-weight:800; text-decoration:underline; text-underline-offset:2px; opacity:1; filter:none; overflow-wrap:anywhere;} .vip-badge{display:inline-flex;align-items:center;gap:4px;padding:6px 11px;border-radius:999px;color:#9a6a00;background:#fff3d6;border:1px solid #ffe1a1;font-size:12px;font-weight:800} .locked{margin-top:14px;padding:16px;border-radius:18px;background:#fff8e6;border:1px dashed #f5a623;text-align:center;color:#33465f;font-size:14px;line-height:1.6} .locked b{display:block;margin-bottom:12px}
   .btn{
     display:inline-flex; align-items:center; justify-content:center; min-height:44px;
     background:linear-gradient(135deg,var(--blue),var(--blue2)); color:#fff; text-decoration:none;
@@ -267,7 +267,7 @@
 <script>
 var API = 'https://script.google.com/macros/s/AKfycbyeXvBLYcbe038_QFTxiwulGH-oVbgsXI5_9VZ025MjfMaVGlRa_2QUX-0T6LTQeaxG8w/exec';
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');} function linkify(s){var t=esc(s);return t.replace(/(https?:\/\/[^\s<>"']+)/g,function(u){return '<a class="post-link" href="'+u+'" target="_blank" rel="noopener">'+u+'</a>';});}
-function btnFor(p){
+var VIP_COST=10; function getPoints(){try{return parseInt(localStorage.getItem('mh_points')||'0',10)||0;}catch(e){return 0;}} function getUnlocked(){try{return JSON.parse(localStorage.getItem('mh_unlocked')||'{}')||{};}catch(e){return {};}} function isVip(p){return !!(p&&p.title&&p.title.indexOf('[VIP]')>-1);} function isUnlocked(id){try{return !!getUnlocked()[id];}catch(e){return false;}} function cleanTitle(t){return String(t||'').replace('[VIP]','').trim();} function refreshPost(){if(singleId){for(var i=0;i<allPosts.length;i++){if(allPosts[i].id===singleId){document.getElementById('feed').innerHTML='<p><a class="allink" href="./">'+T('back')+'</a></p>'+cardHtml(allPosts[i]);armViews();return;}}}renderFeed();} function unlockPost(id,btn){if(isUnlocked(id)){refreshPost();return;}var pts=getPoints();if(pts<VIP_COST){if(btn){btn.textContent='Need '+(VIP_COST-pts)+' more points — you have '+pts+'P';btn.disabled=true;}return;}var np=pts-VIP_COST;try{localStorage.setItem('mh_points',String(np));}catch(e){}try{var u=getUnlocked();u[id]=true;localStorage.setItem('mh_unlocked',JSON.stringify(u));}catch(e){}var el=document.getElementById('pointsPill');if(el)el.textContent='💎 '+np+'P';refreshPost();} function btnFor(p){
   if(!p.link) return '';
   if(p.type.indexOf('File')>-1) return '<a class="btn file" href="'+esc(p.link)+'" target="_blank" rel="noopener">'+T('btn_file')+'</a>';
   if(p.type.indexOf('Video')>-1) return '<a class="btn video" href="'+esc(p.link)+'" target="_blank" rel="noopener">'+T('btn_video')+'</a>';
@@ -279,9 +279,9 @@ function cardHtml(p){
   var ds=d? ('<div class="date">'+d.toLocaleDateString('en-GB')+'</div>') : '';
   var img=(p.type.indexOf('ပုံ')>-1 && p.link)? '<img class="img" src="'+esc(p.link)+'" alt="">' : '';
   var vid=(!img && p.type.indexOf('Video')>-1 && p.link && p.link.indexOf('drive.google.com')>-1)? '<div style="position:relative;padding-top:56.25%;margin-top:10px"><iframe src="'+esc(p.link)+'" style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;border-radius:12px" allowfullscreen></iframe></div>' : '';
-  var media=img||vid;
+  var media=img||vid; var vip=isVip(p); var unlocked=!vip||isUnlocked(p.id); var title=cleanTitle(p.title); var bodyHtml=unlocked?linkify(p.body):esc(p.body).replace(/(https?:\/\/[^\s<>"']+)/g,'🔒'); if(!unlocked) media='';
   var share=p.id? '<button class="sharebtn" onclick="copyLink(this,\''+esc(p.id)+'\')">'+T('copy')+'</button>' : '';
-  return '<article class="card" data-pid="'+esc(p.id||'')+'"><div class="meta-row"><span class="tag">'+esc(p.type)+'</span><div class="meta-right"><span class="views">👁 <b id="vw-'+esc(p.id||'')+'">'+(p.views||0)+'</b></span>'+ds+'</div></div><h2>'+esc(p.title)+'</h2><p>'+linkify(p.body)+'</p>'+media+'<div class="actions">'+(media?'':btnFor(p))+share+'</div></article>';
+  return '<article class="card" data-pid="'+esc(p.id||'')+'"><div class="meta-row"><span class="tag">'+esc(p.type)+'</span>'+(vip?'<span class="vip-badge">👑 VIP</span>':'')<div class="meta-right"><span class="views">👁 <b id="vw-'+esc(p.id||'')+'">'+(p.views||0)+'</b></span>'+ds+'</div></div><h2>'+esc(title)+'</h2><p>'+bodyHtml+'</p>'+media+(unlocked?'<div class="actions">'+(media?'':btnFor(p))+share+'</div>':'<div class="locked"><b>🔒 VIP — Unlock for 10P (you have '+getPoints()+'P)</b><button class="btn" data-pid="'+esc(p.id)+'" onclick="unlockPost(this.dataset.pid,this)">🔓 Unlock for 10P</button></div><div class="actions">'+share+'</div>')+'</article>';
 }
 var allPosts=[];
 var curFilter='';
