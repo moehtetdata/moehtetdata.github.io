@@ -170,7 +170,7 @@
     </select>
   </label>
   <label>စာသား <textarea id="body" placeholder="မျှဝေချင်တာ ရေးပါ…"></textarea></label>
-  <label>Link (ပုံ / App / File / Video ရှိရင်) <input id="link" placeholder="https://…"></label><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="vip" style="width:auto;margin-top:0;padding:0;border:0;background:none"> 👑 VIP post</label>
+  <label>Link (ပုံ / App / File / Video ရှိရင်) <input id="link" placeholder="https://…"></label><label style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="vip" onchange="toggleRedeemCode()" style="width:auto;margin-top:0;padding:0;border:0;background:none"> 👑 VIP post</label><label id="redeemWrap" style="display:none;margin-top:10px">Redeem Code <input id="redeemCode" placeholder="e.g. VIP2026" disabled></label>
   <label class="upload-label">📷🎬 ပုံ / Video တို တင်ရန် <span style="display:block;margin-top:5px;color:#68798f;font-weight:500">ဖုန်းထဲက ရွေးလိုက်ရင် အလိုအလျောက် upload လုပ်ပေးမယ်</span> <input id="imgfile" type="file" accept="image/*,video/*" onchange="uploadImage(this)"></label>
   <div id="upstatus" style="margin-top:8px;font-size:14px"></div>
   <img id="preview" class="imgprev" style="display:none" alt="">
@@ -343,8 +343,8 @@ function compressVideo(f, done){
     v.onerror=function(){ clearTimeout(timer); fin(null); };
   }catch(e){ fin(null); }
 }
-function publish(){
-  var title=document.getElementById('title').value.trim(); if(document.getElementById('vip')&&document.getElementById('vip').checked&&title.indexOf('[VIP]')!==0) title='[VIP] '+title;
+function toggleRedeemCode(){var v=document.getElementById('vip');var w=document.getElementById('redeemWrap');var c=document.getElementById('redeemCode');if(!v||!w||!c)return;var on=v.checked;w.style.display=on?'block':'none';c.disabled=!on;if(!on)c.value='';} function publish(){
+  var title=document.getElementById('title').value.trim(); if(document.getElementById('vip')&&document.getElementById('vip').checked&&title.indexOf('[VIP]')!==0){var _code='';var _ce=document.getElementById('redeemCode');if(_ce)_code=_ce.value.trim().replace(/\s+/g,'');title=(_code?'[VIP:'+_code+'] ':'[VIP] ')+title;}
   var body=document.getElementById('body').value.trim();
   var st=document.getElementById('status');
   if(uploading){ st.textContent='⏳ ပုံ/Video တင်နေတုန်းမို့ ခဏစောင့်ပါ'; return; }
@@ -355,7 +355,7 @@ function publish(){
     btn.disabled=false;
     if(res && res.ok){
       st.textContent='✅ တင်ပြီးပြီ — site မှာ တန်း မြင်ရပြီ';
-      document.getElementById('title').value=''; document.getElementById('body').value=''; document.getElementById('link').value=''; if(document.getElementById('vip')) document.getElementById('vip').checked=false;
+      document.getElementById('title').value=''; document.getElementById('body').value=''; document.getElementById('link').value=''; if(document.getElementById('vip')) document.getElementById('vip').checked=false;if(document.getElementById('redeemCode')){document.getElementById('redeemCode').value='';document.getElementById('redeemCode').disabled=true;}if(document.getElementById('redeemWrap'))document.getElementById('redeemWrap').style.display='none';
       document.getElementById('preview').style.display='none'; document.getElementById('upstatus').textContent=''; document.getElementById('imgfile').value='';
       loadList();
     } else {
