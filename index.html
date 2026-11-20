@@ -74,7 +74,7 @@
   .w-row{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:15px; position:relative; z-index:1}
   .w-stars{padding:7px 12px; border-radius:999px; background:rgba(255,255,255,.20); border:1px solid rgba(255,255,255,.35); font-size:13px; font-weight:750}
   .w-note{font-size:12.5px; opacity:.9}
-  .quick{display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-top:20px}
+  .quick{display:grid; grid-template-columns:repeat(6,1fr); gap:6px; margin-top:20px}
   .qa{
     background:none; border:0; cursor:pointer; color:var(--ink); padding:0;
     display:flex; flex-direction:column; align-items:center; gap:8px;
@@ -235,7 +235,6 @@
     <button class="qa active" data-f="" onclick="setFilter(this,'')"><span class="qa-ic">🧾</span><span id="qaAll">အားလုံး</span></button>
     <button class="qa" data-f="App" onclick="setFilter(this,'App')"><span class="qa-ic"><svg viewBox="0 0 24 24" width="22" height="22" style="display:block" role="img" aria-label="Apps"><rect x="3" y="3" width="8" height="8" rx="2" fill="#0057d9"/><rect x="13" y="3" width="8" height="8" rx="2" fill="#0090ff"/><rect x="3" y="13" width="8" height="8" rx="2" fill="#0090ff"/><rect x="13" y="13" width="8" height="8" rx="2" fill="#0057d9"/></svg></span><span id="qaApps">Apps</span></button>
     <button class="qa" data-f="File" onclick="setFilter(this,'File')"><span class="qa-ic">📄</span><span id="qaFiles">Files</span></button>
-    <button class="qa" data-f="Video" onclick="setFilter(this,'Video')"><span class="qa-ic">▶️</span><span id="qaVideo">Video</span></button>
     <button class="qa" data-f="ပုံ" onclick="setFilter(this,'ပုံ')"><span class="qa-ic">🖼️</span><span id="qaImgs">ပုံများ</span></button><button class="qa" data-f="VIP" onclick="setFilter(this,'VIP')"><span class="qa-ic">👑</span><span>VIP</span></button><button class="qa" data-f="Normal" onclick="setFilter(this,'Normal')"><span class="qa-ic">📰</span><span>Normal</span></button>
   </div>
 </div>
