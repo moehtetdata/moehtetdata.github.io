@@ -321,7 +321,7 @@ function jumpFilter(e,f){
 }
 function openSupport(e){
   if(e) e.preventDefault();
-  if(window.Tawk_API){if(Tawk_API.showWidget) Tawk_API.showWidget();if(Tawk_API.maximize) Tawk_API.maximize();}
+  if(window.Tawk_API&&Tawk_API.showWidget&&Tawk_API.maximize&&window._tawkReady){Tawk_API.showWidget();Tawk_API.maximize();}else if(!window._supWaiting){window._supWaiting=true;window._supTries=0;(function tryOpen(){if(window.Tawk_API&&Tawk_API.showWidget&&Tawk_API.maximize&&window._tawkReady){window._supWaiting=false;Tawk_API.showWidget();Tawk_API.maximize();return;}if(window._supTries++<30){setTimeout(tryOpen,500);return;}window._supWaiting=false;alert('Support Chat could not be loaded. Please check your connection and try again.');})();}
 }
 var singleId='';
 function start(posts){
@@ -465,7 +465,7 @@ document.body.appendChild(s);
 </script>
 <!--Start of Tawk.to Script-->
 <script type="text/javascript">
-var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date(); Tawk_API.onLoad=function(){if(Tawk_API.hideWidget) Tawk_API.hideWidget();};
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date(); Tawk_API.onLoad=function(){window._tawkReady=true;if(Tawk_API.hideWidget) Tawk_API.hideWidget();if(window._supWaiting){window._supWaiting=false;openSupport();}};
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
 s1.async=true;
