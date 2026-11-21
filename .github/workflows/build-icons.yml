@@ -1,0 +1,38 @@
+name: Build PWA icons
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'icons/icon.svg'
+      - 'icons/icon-maskable.svg'
+      - '.github/workflows/build-icons.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install rsvg-convert
+        run: sudo apt-get update && sudo apt-get install -y librsvg2-bin
+      - name: Render PNG icons
+        run: |
+          rsvg-convert -w 192 -h 192 icons/icon.svg -o icons/icon-192.png
+          rsvg-convert -w 512 -h 512 icons/icon.svg -o icons/icon-512.png
+          rsvg-convert -w 512 -h 512 icons/icon-maskable.svg -o icons/icon-512-maskable.png
+          rsvg-convert -w 180 -h 180 icons/icon.svg -o icons/apple-touch-icon.png
+          ls -l icons/
+      - name: Commit icons
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add icons/icon-192.png icons/icon-512.png icons/icon-512-maskable.png icons/apple-touch-icon.png
+          if git diff --cached --quiet; then
+            echo "No icon changes to commit."
+          else
+            git commit -m "Generate PWA icons (192/512/maskable/180) from SVG"
+            git push
+          fi
