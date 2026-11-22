@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Atom Balance — လက်ကျန် စစ်မယ်</title>
+<meta name="description" content="Atom Balance — Bill, Data, မိနစ် လက်ကျန်တွေကို တစ်ချက်နှိပ်ရုံနဲ့ စစ်မယ်။ Bill ဖြည့်တာလည်း QR စကင်န်နဲ့ ဖြည့်လို့ရတယ်။">
+<meta name="theme-color" content="#E4002B">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icons/icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#E4002B; --red-deep:#8F0E1E; --red-dark:#5C0A14;
+    --gold:#F5A623; --gold-soft:#FFD97A;
+    --ink:#2B1216; --muted:#8A6D70; --bg:#FFF5F6; --card:#FFFFFF;
+    --line:rgba(228,0,43,.12); --shadow:0 10px 30px rgba(143,14,30,.12);
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  [hidden]{display:none !important}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    font-family:"Noto Sans Myanmar", system-ui, -apple-system, "Segoe UI", sans-serif;
+    background:linear-gradient(180deg,#FFF5F6 0%,#FDECEC 60%,#FBE3E6 100%);
+    color:var(--ink); min-height:100vh; line-height:1.6;
+  }
+  .wrap{max-width:560px; margin:0 auto; padding:0 16px 40px}
+
+  /* ---------- Header ---------- */
+  .hero{
+    background:
+      radial-gradient(120% 140% at 85% -10%, rgba(245,166,35,.55) 0%, rgba(245,166,35,0) 42%),
+      radial-gradient(90% 120% at 0% 0%, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 55%),
+      linear-gradient(135deg,#8F0E1E 0%,#C40022 48%,#E4002B 100%);
+    color:#fff; border-radius:0 0 28px 28px;
+    padding:26px 20px 30px; position:relative; overflow:hidden;
+    box-shadow:0 14px 34px rgba(143,14,30,.28);
+  }
+  .hero::after{
+    content:""; position:absolute; left:20px; right:20px; bottom:0; height:3px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);
+    border-radius:3px; opacity:.9;
+  }
+  .hero-inner{max-width:560px; margin:0 auto; display:flex; align-items:center; gap:14px}
+  .logo{
+    width:56px; height:56px; flex:0 0 56px; border-radius:18px;
+    background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.45);
+    backdrop-filter:blur(6px); display:flex; align-items:center; justify-content:center;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 6px 16px rgba(0,0,0,.18);
+  }
+  .logo svg{width:34px; height:34px}
+  .hero h1{font-size:24px; font-weight:900; letter-spacing:.2px; line-height:1.25}
+  .hero h1 .gold{color:var(--gold-soft)}
+  .hero p{font-size:13px; opacity:.92; margin-top:2px}
+  .hero .en{font-size:11px; letter-spacing:2.5px; text-transform:uppercase; opacity:.65; font-weight:700}
+
+  /* ---------- Cards & layout ---------- */
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:20px;
+    box-shadow:var(--shadow); padding:20px; margin-top:16px;
+  }
+  .card h2{font-size:18px; font-weight:800}
+  .sub{font-size:12.5px; color:var(--muted)}
+  .section-title{
+    display:flex; align-items:center; gap:10px; margin:26px 2px 2px;
+    font-size:16px; font-weight:800;
+  }
+  .section-title::after{content:""; flex:1; height:2px; border-radius:2px;
+    background:linear-gradient(90deg,var(--gold),transparent)}
+  .note{
+    margin-top:16px; padding:12px 14px; border-radius:14px; font-size:12.5px;
+    background:#FFF8E6; border:1px solid #F5D98A; color:#7A5A00;
+  }
+  .note b{color:#5C4300}
+
+  /* ---------- Forms ---------- */
+  label{display:block; font-size:13.5px; font-weight:700; margin:14px 0 6px}
+  input[type="tel"], input[type="text"]{
+    width:100%; font-family:inherit; font-size:18px; font-weight:700;
+    padding:13px 15px; border-radius:14px; border:1.5px solid #EFC9CE;
+    background:#FFFDFD; color:var(--ink); outline:none; letter-spacing:.5px;
+  }
+  input[type="tel"]:focus, input[type="text"]:focus{border-color:var(--red); box-shadow:0 0 0 4px rgba(228,0,43,.12)}
+  input::placeholder{color:#C9A6AB; font-weight:500}
+  .hint{font-size:12px; color:var(--muted); margin-top:6px}
+  .err{
+    display:none; margin-top:10px; padding:10px 12px; border-radius:12px;
+    background:#FDECEC; border:1px solid #F6B8BE; color:#A3001B; font-size:13.5px; font-weight:600;
+  }
+  .err.show{display:block}
+  .ok{
+    display:none; margin-top:10px; padding:10px 12px; border-radius:12px;
+    background:#EAF7EE; border:1px solid #9ED6AE; color:#176B32; font-size:13.5px; font-weight:600;
+  }
+  .ok.show{display:block}
+
+  .btn{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    width:100%; border:0; cursor:pointer; font-family:inherit;
+    font-size:16px; font-weight:800; color:#fff; text-decoration:none;
+    padding:14px 18px; border-radius:16px; margin-top:16px;
+    background:linear-gradient(135deg,#C40022,#E4002B 55%,#F43A56);
+    box-shadow:0 8px 20px rgba(228,0,43,.32), inset 0 1px 0 rgba(255,255,255,.35);
+    transition:transform .12s ease, box-shadow .12s ease;
+  }
+  .btn:active{transform:scale(.98); box-shadow:0 4px 12px rgba(228,0,43,.28)}
+  .btn.gold{
+    background:linear-gradient(135deg,#E89B00,#F5A623 55%,#FFC95E); color:#4A2E00;
+    box-shadow:0 8px 20px rgba(245,166,35,.35), inset 0 1px 0 rgba(255,255,255,.5);
+  }
+  .btn.ghost{
+    background:#fff; color:var(--red); border:1.5px solid #F0B9C0; box-shadow:none;
+  }
+  .btn.small{width:auto; padding:10px 16px; font-size:14px; margin-top:0; border-radius:12px}
+  .btn:disabled{opacity:.55; cursor:default}
+
+  /* ---------- Balance grid ---------- */
+  .grid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px}
+  .bal{
+    background:#fff; border:1px solid var(--line); border-radius:18px;
+    padding:16px 14px; box-shadow:var(--shadow);
+    display:flex; flex-direction:column; gap:8px; min-height:172px;
+  }
+  .bal .ic{
+    width:44px; height:44px; border-radius:13px; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg,#FFF0F1,#FFE3E6); border:1px solid #F6C6CC;
+  }
+  .bal .ic svg{width:24px; height:24px; stroke:var(--red); fill:none; stroke-width:1.9; stroke-linecap:round; stroke-linejoin:round}
+  .bal h3{font-size:15.5px; font-weight:800; line-height:1.35}
+  .bal .en{font-size:11px; color:var(--muted); font-weight:600; letter-spacing:.4px}
+  .bal .code{
+    font-size:14px; font-weight:800; color:var(--red-deep);
+    background:#FFF0F1; border:1px dashed #EFA9B2; border-radius:9px;
+    padding:4px 8px; display:inline-block; align-self:flex-start; letter-spacing:.5px;
+  }
+  .bal .actions{display:flex; gap:8px; margin-top:auto}
+  .call{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:6px;
+    background:linear-gradient(135deg,#C40022,#E4002B); color:#fff; text-decoration:none;
+    font-size:14px; font-weight:800; font-family:inherit;
+    padding:10px 8px; border-radius:12px;
+    box-shadow:0 5px 14px rgba(228,0,43,.28);
+  }
+  .copy{
+    border:1.5px solid #EFC9CE; background:#fff; color:var(--red-deep);
+    font-size:13px; font-weight:700; font-family:inherit; cursor:pointer;
+    padding:10px 12px; border-radius:12px;
+  }
+  .copy:active{background:#FFF0F1}
+
+  .me-row{
+    display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+  }
+  .me-row .num{
+    font-size:17px; font-weight:800; background:#FFF0F1; border:1px solid #F6C6CC;
+    padding:8px 14px; border-radius:12px; letter-spacing:.5px;
+  }
+  .link-btn{
+    background:none; border:0; cursor:pointer; font-family:inherit;
+    color:var(--red); font-size:13.5px; font-weight:700; text-decoration:underline;
+    padding:6px 2px;
+  }
+
+  /* ---------- QR / top-up ---------- */
+  #qr-reader{border-radius:16px; overflow:hidden; margin-top:12px; border:1px solid var(--line)}
+  #qr-reader video{border-radius:16px}
+  .confirm-box{
+    display:none; margin-top:14px; padding:16px; border-radius:16px;
+    background:linear-gradient(135deg,#FFF6E0,#FFF0F1);
+    border:1.5px solid var(--gold); text-align:center;
+  }
+  .confirm-box.show{display:block}
+  .confirm-box .big-code{
+    font-size:22px; font-weight:900; color:var(--red-deep); letter-spacing:1px; margin:6px 0 2px;
+  }
+  .top-actions{display:flex; gap:10px; margin-top:14px}
+  .top-actions .btn{margin-top:0}
+
+  /* ---------- Toast & footer ---------- */
+  #toast{
+    position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px);
+    background:#2B1216; color:#fff; font-size:14px; font-weight:700;
+    padding:11px 18px; border-radius:999px; box-shadow:0 10px 26px rgba(0,0,0,.3);
+    opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease;
+    z-index:50; max-width:92vw; text-align:center;
+  }
+  #toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+  footer{margin-top:28px; text-align:center; font-size:12px; color:var(--muted)}
+  footer b{color:var(--red-deep)}
+  @media (max-width:380px){
+    .grid{grid-template-columns:1fr}
+    .bal{min-height:0}
+    .hero h1{font-size:21px}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="logo" aria-hidden="true">
+      <svg viewBox="0 0 48 48"><path d="M10 36 L24 10 L38 36" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M17 28 H31" stroke="#F5A623" stroke-width="5" stroke-linecap="round"/><circle cx="38.5" cy="12.5" r="3.4" fill="#F5A623"/></svg>
+    </div>
+    <div>
+      <div class="en">Atom Balance</div>
+      <h1>Atom <span class="gold">Balance</span></h1>
+      <p>လက်ကျန် စစ်မယ် • Bill ဖြည့်မယ် — တစ်ချက်နှိပ်ရုံနဲ့</p>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ============ Screen 1 : Login ============ -->
+  <section id="screen-login" class="card">
+    <h2>👋 မင်္ဂလာပါ</h2>
+    <p class="sub">Login — Atom ဖုန်းနံပါတ်နဲ့ ဝင်မယ်</p>
+    <!-- Step 1 : phone number -->
+    <div id="login-step1">
+      <label for="phone">Atom ဖုန်းနံပါတ်</label>
+      <input type="tel" id="phone" inputmode="tel" autocomplete="tel"
+             placeholder="09xxxxxxxxx" maxlength="13">
+      <div class="hint">ဥပမာ — 0979xxxxxxx &nbsp;•&nbsp; Password / OTP မလို — နံပါတ်ထည့်ရုံနဲ့ တန်းဝင်မယ်</div>
+      <div class="err" id="login-err"></div>
+      <button class="btn" id="login-btn" type="button">➡️ Login ဝင်မယ်</button>
+    </div>
+
+    <p class="hint" style="margin-top:12px">🔒 နံပါတ်ကို ဒီဖုန်းထဲမှာပဲ သိမ်းထားတယ် — ဘယ်နေရာကိုမှ မပို့ဘူး။</p>
+  </section>
+
+  <!-- ============ Screen 2 : Home ============ -->
+  <section id="screen-home" hidden>
+    <div class="card">
+      <p class="sub">မင်္ဂလာပါ 👋</p>
+      <div class="me-row" style="margin-top:6px">
+        <span class="num" id="my-number">—</span>
+        <button class="link-btn" id="logout-btn" type="button">ထွက်မယ်</button>
+      </div>
+      <p class="hint" style="margin-top:8px">Atom ဖုန်းနံပါတ်နဲ့ Login ဝင်ထားတယ်။</p>
+      <button class="btn gold" id="go-topup" type="button">💳 Bill ဖြည့်မယ်</button>
+    </div>
+
+    <div class="section-title">📊 လက်ကျန် စစ်မယ် <span class="sub" style="font-weight:600">— ခလုတ် တစ်ချက်နှိပ်</span></div>
+
+    <div class="grid">
+      <div class="bal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M3 10h18"/><path d="M7 15h4"/></svg></div>
+        <div><h3>Bill လက်ကျန်</h3><div class="en">MAIN BALANCE</div></div>
+        <span class="code">*124#</span>
+        <div class="actions">
+          <a class="call" href="tel:*124%23">📞 ခေါ်မယ်</a>
+          <button class="copy" type="button" data-code="*124#">ကူးမယ်</button>
+        </div>
+      </div>
+
+      <div class="bal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5"/><path d="M12 13v8"/></svg></div>
+        <div><h3>Pack လက်ကျန်</h3><div class="en">PACK BALANCE</div></div>
+        <span class="code">*124*1#</span>
+        <div class="actions">
+          <a class="call" href="tel:*124*1%23">📞 ခေါ်မယ်</a>
+          <button class="copy" type="button" data-code="*124*1#">ကူးမယ်</button>
+        </div>
+      </div>
+
+      <div class="bal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 18v-6M9 18V9M14 18v-9M19 18V6"/><path d="M3 20h18"/></svg></div>
+        <div><h3>Data လက်ကျန်</h3><div class="en">DATA BALANCE</div></div>
+        <span class="code">*9124#</span>
+        <div class="actions">
+          <a class="call" href="tel:*9124%23">📞 ခေါ်မယ်</a>
+          <button class="copy" type="button" data-code="*9124#">ကူးမယ်</button>
+        </div>
+      </div>
+
+      <div class="bal">
+        <div class="ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <div><h3>မိနစ်လက်ကျန်</h3><div class="en">MINUTES BALANCE</div></div>
+        <span class="code">*9125#</span>
+        <div class="actions">
+          <a class="call" href="tel:*9125%23">📞 ခေါ်မယ်</a>
+          <button class="copy" type="button" data-code="*9125#">ကူးမယ်</button>
+        </div>
+      </div>
+
+      <div class="bal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1 13H7z"/><path d="M9 7a3 3 0 0 1 6 0"/><path d="M9 11h6"/></svg></div>
+        <div><h3>Pack ဝယ်ရန်</h3><div class="en">BUY PACK</div></div>
+        <span class="code">*979#</span>
+        <div class="actions">
+          <a class="call" href="tel:*979%23">📞 ခေါ်မယ်</a>
+          <button class="copy" type="button" data-code="*979#">ကူးမယ်</button>
+        </div>
+      </div>
+
+      <div class="bal">
+        <div class="ic"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M10 18h4"/></svg></div>
+        <div><h3>ကိုယ့်ဖုန်းနံပါတ်</h3><div class="en">MY NUMBER</div></div>
+        <span class="code">*97#</span>
+        <div class="actions">
+          <a class="call" href="tel:*97%23">📞 ခေါ်မယ်</a>
+          <button class="copy" type="button" data-code="*97#">ကူးမယ်</button>
+        </div>
+      </div>
+
+      <div class="bal">
+        <div class="ic"><svg viewBox="0 0 24 24"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="2" y="13" width="4" height="6" rx="1.5"/><rect x="18" y="13" width="4" height="6" rx="1.5"/><path d="M20 19a3 3 0 0 1-3 3h-3"/></svg></div>
+        <div><h3>Call Center</h3><div class="en">ATOM HELPLINE</div></div>
+        <span class="code">979</span>
+        <div class="actions">
+          <a class="call" href="tel:979">📞 ခေါ်မယ်</a>
+          <button class="copy" type="button" data-code="979">ကူးမယ်</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="note">ℹ️ <b>သိထားပါ</b> — လက်ကျန်ကို Atom က ပြန်ပြပေးပါတယ်။ ခေါ်ပြီးရင် Atom ရဲ့ စာနဲ့ ပေါ်လာမယ် — App ထဲမှာ တိုက်ရိုက်ပေါ်တာ မဟုတ်ပါ။ iPhone သုံးရင် Code ကို <b>ကူးမယ်</b> နှိပ်ပြီး Dialer မှာ Paste လုပ်ပါ။</div>
+  </section>
+
+  <!-- ============ Screen 3 : Top-up ============ -->
+  <section id="screen-topup" hidden>
+    <div class="card">
+      <h2>💳 Bill ဖြည့်မယ်</h2>
+      <p class="sub">Top-up — Scratch Card PIN နဲ့ ဖြည့်မယ်</p>
+
+      <div class="section-title" style="margin-top:18px">📷 QR စကင်န်</div>
+      <p class="hint">ကတ်ပေါ်က QR Code ကို ကင်မရာနဲ့ စကင်န်ဖတ်ရင် PIN အလိုလို ဖြည့်ပေးမယ်။</p>
+      <div class="top-actions">
+        <button class="btn" id="qr-start" type="button">📷 QR စကင်န် ဖွင့်မယ်</button>
+        <button class="btn ghost" id="qr-stop" type="button" hidden>ပိတ်မယ်</button>
+      </div>
+      <div id="qr-reader" hidden></div>
+      <div class="err" id="qr-err"></div>
+      <div class="ok" id="qr-ok"></div>
+
+      <div class="section-title">✍️ PIN ကိုယ်တိုင် ရိုက်မယ်</div>
+      <label for="pin">Scratch Card PIN</label>
+      <input type="text" id="pin" inputmode="numeric" autocomplete="off"
+             placeholder="ဥပမာ — 1234567890123" maxlength="20">
+      <div class="hint">PIN က ကတ်ကို ခြစ်လိုက်ရင် ပေါ်တဲ့ ဂဏန်းတွေ။ စာလုံး မပါဘူး၊ ဂဏန်းပဲ။</div>
+      <div class="err" id="pin-err"></div>
+
+      <button class="btn gold" id="topup-go" type="button">ဖြည့်မယ် →</button>
+
+      <div class="confirm-box" id="topup-confirm">
+        <div class="sub">ဒီ Code ကို ခေါ်ပြီး Bill ဖြည့်မယ်</div>
+        <div class="big-code" id="topup-code">*123*#</div>
+        <p class="hint">ခေါ်ပြီးရင် Atom ကနေ Bill ဖြည့်ပေးမယ်။</p>
+        <div class="top-actions">
+          <a class="btn" id="topup-call" href="tel:*123%23">📞 ခေါ်ပြီး ဖြည့်မယ်</a>
+          <button class="btn ghost" id="topup-edit" type="button">ပြန်ပြင်မယ်</button>
+        </div>
+      </div>
+
+      <div class="top-actions">
+        <button class="btn ghost" id="back-home" type="button">← အရင်စာမျက်နှာ ပြန်သွားမယ်</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <b>Atom Balance</b> — Atom သုံးစွဲသူတွေအတွက် လက်ကျန် စစ်တဲ့ App<br>
+    <span>Atom Myanmar နဲ့ တိုက်ရိုက် ချိတ်ထားတာ မဟုတ်ပါ • USSD Code တွေနဲ့ စစ်ပေးတာ</span>
+  </footer>
+</div>
+
+<div id="toast" role="status"></div>
+
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  var $ = function(id){ return document.getElementById(id); };
+  var PHONE_KEY = "atom_phone";
+
+  var loginScreen = $("screen-login"), homeScreen = $("screen-home"), topupScreen = $("screen-topup");
+  var phoneInput = $("phone"), loginErr = $("login-err");
+  var pendingPhone = "";
+  var pinInput = $("pin"), pinErr = $("pin-err");
+  var qrErr = $("qr-err"), qrOk = $("qr-ok");
+  var toastEl = $("toast"), toastTimer = null;
+
+  /* ---------- helpers ---------- */
+  function show(el){ el.hidden = false; }
+  function hide(el){ el.hidden = true; }
+  function showScreen(name){
+    hide(loginScreen); hide(homeScreen); hide(topupScreen);
+    if(name === "login") show(loginScreen);
+    else if(name === "home") show(homeScreen);
+    else if(name === "topup") show(topupScreen);
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+  function toast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    if(toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove("show"); }, 2200);
+  }
+  function showErr(el, msg){ el.textContent = msg; el.classList.add("show"); }
+  function hideErr(el){ el.textContent = ""; el.classList.remove("show"); }
+  function showOk(el, msg){ el.textContent = msg; el.classList.add("show"); }
+  function hideOk(el){ el.textContent = ""; el.classList.remove("show"); }
+
+  /* ---------- login (number only) ----------
+     OTP login can be added later: wire window.AtomAuth (sendOtp /
+     verifyOtp) and restore the two-step UI. For now the number
+     alone logs the user in and is saved on this phone only. */
+  function cleanPhone(raw){
+    return (raw || "").replace(/[\s\-()]/g, "");
+  }
+  function validPhone(num){
+    return /^09\d{7,9}$/.test(num); /* 09 + 7-9 digits = 9-11 digits total */
+  }
+  function showStep1(){
+    hideErr(loginErr);
+  }
+  function doLogin(){
+    var num = cleanPhone(phoneInput.value);
+    if(!validPhone(num)){
+      showErr(loginErr, "ဖုန်းနံပါတ် မမှန်ဘူး — 09 နဲ့ စပြီး ဂဏန်း ၉–၁၁ လုံး ရိုက်ပါ။ ဥပမာ 0979xxxxxxx");
+      phoneInput.focus();
+      return;
+    }
+    hideErr(loginErr);
+    try{ localStorage.setItem(PHONE_KEY, num); }catch(e){}
+    enterHome(num);
+    toast("Login ဝင်ပြီးပြီ ✅");
+  }
+  function enterHome(num){
+    $("my-number").textContent = num;
+    showScreen("home");
+  }
+  function doLogout(){
+    try{ localStorage.removeItem(PHONE_KEY); }catch(e){}
+    stopQr();
+    hide($("topup-confirm"));
+    pinInput.value = "";
+    phoneInput.value = "";
+    pendingPhone = "";
+    showStep1();
+    showScreen("login");
+    toast("ထွက်ပြီးပြီ 👋");
+  }
+
+  $("login-btn").addEventListener("click", doLogin);
+  phoneInput.addEventListener("keydown", function(e){
+    if(e.key === "Enter") doLogin();
+  });
+  $("logout-btn").addEventListener("click", doLogout);
+  $("go-topup").addEventListener("click", function(){ showScreen("topup"); });
+  $("back-home").addEventListener("click", function(){ showScreen("home"); });
+
+  /* ---------- copy code ---------- */
+  function copyText(text){
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        toast("ကူးပြီးပြီ ✅ — " + text);
+      }, function(){ fallbackCopy(text); });
+    } else {
+      fallbackCopy(text);
+    }
+  }
+  function fallbackCopy(text){
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try{ ok = document.execCommand("copy"); }catch(e){}
+    document.body.removeChild(ta);
+    toast(ok ? ("ကူးပြီးပြီ ✅ — " + text) : ("Code: " + text));
+  }
+  var copyBtns = document.querySelectorAll(".copy");
+  for(var i = 0; i < copyBtns.length; i++){
+    copyBtns[i].addEventListener("click", function(){
+      copyText(this.getAttribute("data-code") || "");
+    });
+  }
+
+  /* ---------- top-up PIN ---------- */
+  pinInput.addEventListener("input", function(){
+    pinInput.value = pinInput.value.replace(/\D/g, "");
+  });
+  function doTopup(){
+    var pin = pinInput.value.replace(/\D/g, "");
+    if(pin.length < 6){
+      showErr(pinErr, "PIN မမှန်ဘူး — ကတ်ပေါ်က ဂဏန်းတွေ ပြန်စစ်ပါ။");
+      pinInput.focus();
+      return;
+    }
+    hideErr(pinErr);
+    var code = "*123*" + pin + "#";
+    $("topup-code").textContent = code;
+    $("topup-call").setAttribute("href", "tel:*123*" + pin + "%23");
+    $("topup-confirm").classList.add("show");
+    $("topup-confirm").scrollIntoView({behavior:"smooth", block:"center"});
+  }
+  $("topup-go").addEventListener("click", doTopup);
+  pinInput.addEventListener("keydown", function(e){
+    if(e.key === "Enter") doTopup();
+  });
+  $("topup-edit").addEventListener("click", function(){
+    $("topup-confirm").classList.remove("show");
+    pinInput.focus();
+  });
+
+  /* ---------- QR scanner (graceful degradation) ---------- */
+  var qr = null, qrRunning = false;
+
+  function qrAvailable(){
+    return (typeof Html5Qrcode !== "undefined");
+  }
+  function startQr(){
+    hideErr(qrErr); hideOk(qrOk);
+    if(!qrAvailable()){
+      showErr(qrErr, "QR စကင်န် အလုပ်မလုပ်သေးဘူး — အင်တာနက် ချိတ်ထားလား စစ်ပြီး စာမျက်နှာ ပြန် Load လုပ်ပါ။ ဒါမှမဟုတ် PIN ကို အောက်မှာ ကိုယ်တိုင် ရိုက်ထည့်ပါ။");
+      return;
+    }
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      showErr(qrErr, "ဒီဖုန်းမှာ ကင်မရာ သုံးမရဘူး — PIN ကို အောက်မှာ ကိုယ်တိုင် ရိုက်ထည့်ပါ။");
+      return;
+    }
+    show($("qr-reader"));
+    show($("qr-stop")); hide($("qr-start"));
+    try{
+      qr = new Html5Qrcode("qr-reader");
+    }catch(e){
+      showErr(qrErr, "QR စကင်န် ဖွင့်မရဘူး — PIN ကို အောက်မှာ ကိုယ်တိုင် ရိုက်ထည့်ပါ။");
+      return;
+    }
+    qr.start(
+      {facingMode: "environment"},
+      {fps: 10, qrbox: {width: 250, height: 250}},
+      function(decodedText){
+        var groups = decodedText.match(/\d{6,}/g);
+        if(!groups){
+          showErr(qrErr, "QR ဖတ်လို့ရတယ်၊ ဒါပေမယ့် PIN ဂဏန်း မတွေ့ဘူး — PIN ကို ကိုယ်တိုင် ရိုက်ထည့်ပါ။");
+          return;
+        }
+        var pin = groups[0];
+        for(var g = 0; g < groups.length; g++){
+          if(groups[g].length > pin.length) pin = groups[g];
+        }
+        pinInput.value = pin;
+        stopQr();
+        hideErr(qrErr);
+        showOk(qrOk, "QR ဖတ်ပြီးပြီ ✅ — PIN ထည့်ပြီးပြီ။ အောက်က “ဖြည့်မယ်” ကို နှိပ်ပါ။");
+        pinInput.focus();
+      },
+      function(){ /* per-frame decode miss — ignore silently */ }
+    ).then(function(){
+      qrRunning = true;
+    }).catch(function(err){
+      qrRunning = false;
+      hide($("qr-reader")); hide($("qr-stop")); show($("qr-start"));
+      var msg = "ကင်မရာ ဖွင့်မရဘူး — ကင်မရာ ခွင့်ပြုချက် ပေးပြီး ပြန်စမ်းပါ။ ဒါမှမဟုတ် PIN ကို အောက်မှာ ကိုယ်တိုင် ရိုက်ထည့်ပါ။";
+      if(err && err.name === "NotAllowedError") msg = "ကင်မရာ ခွင့်ပြုချက် မရဘူး — ဖုန်း Setting မှာ ကင်မရာ ခွင့်ပြုပေးပါ။ ဒါမှမဟုတ် PIN ကို အောက်မှာ ကိုယ်တိုင် ရိုက်ထည့်ပါ။";
+      showErr(qrErr, msg);
+    });
+  }
+  function stopQr(){
+    hide($("qr-stop")); show($("qr-start")); hide($("qr-reader"));
+    if(qr && qrRunning){
+      qrRunning = false;
+      qr.stop().then(function(){
+        try{ qr.clear(); }catch(e){}
+      }).catch(function(){});
+    } else if(qr){
+      try{ qr.clear(); }catch(e){}
+    }
+    qr = null;
+  }
+  $("qr-start").addEventListener("click", startQr);
+  $("qr-stop").addEventListener("click", function(){
+    stopQr();
+    hideErr(qrErr);
+  });
+
+  /* ---------- boot ---------- */
+  var saved = null;
+  try{ saved = localStorage.getItem(PHONE_KEY); }catch(e){}
+  if(saved && validPhone(saved)){
+    enterHome(saved);
+  } else {
+    showScreen("login");
+  }
+
+  /* ---------- service worker ---------- */
+  if("serviceWorker" in navigator){
+    window.addEventListener("load", function(){
+      navigator.serviceWorker.register("sw.js").catch(function(){ /* offline cache is optional */ });
+    });
+  }
+})();
+</script>
+</body>
+</html>
