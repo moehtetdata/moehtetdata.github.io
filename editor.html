@@ -188,6 +188,16 @@
 <script>
 var API='https://script.google.com/macros/s/AKfycbyeXvBLYcbe038_QFTxiwulGH-oVbgsXI5_9VZ025MjfMaVGlRa_2QUX-0T6LTQeaxG8w/exec';
 var KEY='mh3375tech';
+var uploadedMediaUrl='';
+function isImageUrl(u){ return /\.(png|jpe?g|gif|webp|svg)(\?|$)/i.test(u||'') || /drive\.google\.com\/thumbnail/i.test(u||''); }
+function moveLinkToBody(){
+    var l=document.getElementById('link'); var b=document.getElementById('body');
+  var old=(l.value||'').trim();
+  if(!old || isImageUrl(old)) return false;
+  var bv=b.value||'';
+  if(bv.indexOf(old)===-1){ b.value=(bv.trim()?bv.trim()+'\n\n':'')+old; }
+  return true;
+}
 var U='POSMOE2000', P='2000POS';
 function doLogin(){
   if(document.getElementById('lu').value===U && document.getElementById('lp').value===P){
@@ -275,10 +285,12 @@ function uploadImage(inp){
     var params=new URLSearchParams(); params.append('action','upload'); params.append('key',KEY); params.append('kind','image'); params.append('name','img'+Date.now()+'.jpg'); params.append('img',b64);
     sendUpload(params, function(res){
       if(res && res.ok){
+        var moved=moveLinkToBody();
+        uploadedMediaUrl=res.url;
         document.getElementById('link').value=res.url;
         document.getElementById('kind').value='ပုံ';
         var pv=document.getElementById('preview'); pv.src=res.url; pv.style.display='block';
-        st.textContent='✅ ပုံ တင်ပြီးပြီ — Publish နှိပ်ရင် post မှာ ပုံ တွဲပါမယ်';
+        st.textContent='✅ ပုံ တင်ပြီးပြီ — Publish နှိပ်ရင် post မှာ ပုံ တွဲပါမယ်'+(moved?' — အရင် Download Link ကို အကြောငးအရာထဲ ရွှေ့ထားတယ်':'');
       } else { st.textContent='❌ ပုံ တင်မရဘူး — ပြန်စမ်းပါ (သို့) ပုံ link ကူးထည့်ပြီး တင်ပါ'; }
     });
   };
@@ -304,9 +316,11 @@ function sendVideoBlob(blob, mime, ext){
     var params=new URLSearchParams(); params.append('action','upload'); params.append('key',KEY); params.append('kind','video'); params.append('mime',mime); params.append('name','vid'+Date.now()+'.'+ext); params.append('img',b64);
     sendUpload(params, function(res){
       if(res && res.ok){
+        var moved=moveLinkToBody();
+        uploadedMediaUrl=res.url;
         document.getElementById('link').value=res.url;
         document.getElementById('kind').value='Video Link (တခါတလေ)';
-        st.textContent='✅ Video တင်ပြီးပြီ — Publish နှိပ်ရင် post မှာ video တွဲပါမယ် (site မှာ တန်း ကြည့်လို့ရမယ်)';
+        st.textContent='✅ Video တင်ပြီးပြီ — Publish နှိပ်ရင် post မှာ video တွဲပါမယ် (site မှာ တန်း ကြည့်လို့ရမယ်)'+(moved?' — အရင် Download Link ကို အကြောငးအရာထဲ ရွှေ့ထားတယ်':'');
       } else { st.textContent='❌ Video တင်မရဘူး — connection စစ်ပြီး ပြန်စမ်းပါ'; }
     });
   };
@@ -345,6 +359,7 @@ function compressVideo(f, done){
 }
 function toggleRedeemCode(){var v=document.getElementById('vip');var w=document.getElementById('redeemWrap');var c=document.getElementById('redeemCode');if(!v||!w||!c)return;var on=v.checked;w.style.display=on?'block':'none';c.disabled=!on;if(!on)c.value='';} function publish(){
   var title=document.getElementById('title').value.trim(); if(document.getElementById('vip')&&document.getElementById('vip').checked&&title.indexOf('[VIP]')!==0){var _code='';var _ce=document.getElementById('redeemCode');if(_ce)_code=_ce.value.trim().replace(/\s+/g,'');title=(_code?'[VIP:'+_code+'] ':'[VIP] ')+title;}
+    if(uploadedMediaUrl){ var _lv=document.getElementById('link').value.trim(); if(!_lv){ document.getElementById('link').value=uploadedMediaUrl; } else if(_lv!==uploadedMediaUrl){ moveLinkToBody(); document.getElementById('link').value=uploadedMediaUrl; } }
   var body=document.getElementById('body').value.trim();
   var st=document.getElementById('status');
   if(uploading){ st.textContent='⏳ ပုံ/Video တင်နေတုန်းမို့ ခဏစောင့်ပါ'; return; }
