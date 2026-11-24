@@ -513,6 +513,8 @@ document.body.appendChild(s);
 <!--Start of Tawk.to Script-->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date(); Tawk_API.onLoad=function(){window._tawkReady=true;if(Tawk_API.hideWidget) Tawk_API.hideWidget();if(window._supWaiting){window._supWaiting=false;openSupport();}};
+/* Tawk auto-close: end the chat if the visitor is silent for 2 minutes (timer resets on visitor + agent messages). */
+var _tawkIdleTimer=null;function _tawkIdleReset(){try{clearTimeout(_tawkIdleTimer);}catch(e){}_tawkIdleTimer=setTimeout(function(){try{if(window.Tawk_API&&Tawk_API.isChatOngoing&&Tawk_API.isChatOngoing()&&Tawk_API.endChat)Tawk_API.endChat();}catch(e){}},120000);}function _tawkIdleClear(){try{clearTimeout(_tawkIdleTimer);}catch(e){}}Tawk_API.onChatStarted=function(){_tawkIdleReset();};Tawk_API.onChatMessageVisitor=function(){_tawkIdleReset();};Tawk_API.onChatMessageAgent=function(){_tawkIdleReset();};Tawk_API.onChatEnded=function(){_tawkIdleClear();};
 (function(){
 var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
 s1.async=true;
